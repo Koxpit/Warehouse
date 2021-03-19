@@ -1,0 +1,52 @@
+﻿@model Warehouse.ViewModels.ProductsViewModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Продукция</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>Сектор</td>
+            <td>Ряд</td>
+            <td>Код</td>
+            <td>Наименование</td>
+            <td>Партия</td>
+            <td>Дата производства</td>
+            <td>Годен до</td>
+            <td>Код паллеты</td>
+            <td>Кол-во коробов в паллете</td>
+            <td>Стоимость</td>
+            <td>Кол-во паллет</td>
+        </tr>
+        @foreach (var item in Model.Products)
+        {
+    <tr align="center">
+        <td>@item.Sector</td>
+        <td>@item.Number</td>
+        <td>@item.Product.Code</td>
+        <td>@item.Product.Name</td>
+        <td>@item.Product.Party</td>
+        <td>@item.Product.DateOfManufacture.ToShortDateString()</td>
+        <td>@item.Product.Term.ToShortDateString()</td>
+        <td>@item.Product.CodeOfPallete</td>
+        <td>@item.Product.BoxesInPallete</td>
+        <td>@item.Product.Cost</td>
+        <td>@item.NumOfPalletes</td>
+    </tr>
+        }
+    </table>
+</div>
+

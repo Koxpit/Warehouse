@@ -1,0 +1,43 @@
+﻿@model Warehouse.ViewModels.OrdersViewModel
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Заказы</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>Тип</td>
+            <td>Плановое время</td>
+            <td>Грузы</td>
+        </tr>
+        @foreach (var order in Model.Orders)
+        {
+    <tr align="center">
+        <td>@order.Type</td>
+        <td>@order.ArrivalTime.ToShortDateString()</td>
+        <td>
+            @foreach (var cargo in order.Cargos)
+            {
+                <p>Номер заказа: @cargo.Number</p>
+                <p>Количество паллет: @cargo.NumOfPalletes</p>
+                <p>Наименование продукции: @cargo.Product.Name</p>
+            }
+        </td>
+    </tr>
+        }
+    </table>
+</div>
+

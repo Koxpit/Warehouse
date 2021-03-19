@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Warehouse.Models.Storage>
+@{
+    ViewData["Title"] = "Storages";
+}
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Продукция</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>Наименование</td>
+            <td>Территория</td>
+            <td>Город</td>
+        </tr>
+        @foreach (var storage in Model)
+        {
+            <tr align="center">
+                <td>@storage.Name</td>
+                <td>@storage.Territory</td>
+                <td>@storage.City</td>
+            </tr>
+        }
+    </table>
+</div>

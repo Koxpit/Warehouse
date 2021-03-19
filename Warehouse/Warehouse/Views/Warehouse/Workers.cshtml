@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Warehouse.Models.Worker>
+@{
+    ViewData["Title"] = "Workers Page";
+}
+
+    <style type="text/css">
+        TABLE {
+            border: 1px solid black; /* Рамка вокруг таблицы */
+        }
+
+        TR {
+            padding: 3px; /* Поля вокруг содержимого ячеек */
+            border: 1px solid black; /* Рамка вокруг таблицы */
+        }
+    </style>
+<div class="text-center">
+    <h1 class="col-md-12">Персонал</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>ФИО</td>
+            <td>Дата рождения</td>
+            <td>Опыт(лет)</td>
+            <td>Должность</td>
+            <td>Табельный номер</td>
+        </tr>
+        @foreach (var worker in Model)
+        {
+            <tr align="center">
+                <td>@worker.FIO</td>
+                <td>@worker.Birthday.ToShortDateString()</td>
+                <td>@worker.Experience</td>
+                <td>@worker.Position</td>
+                <td>@worker.Number</td>
+            </tr>
+        }
+    </table>
+</div>
