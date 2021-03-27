@@ -26,10 +26,14 @@
         @foreach (var storage in Model)
         {
             <tr align="center">
-                <td>@storage.Name</td>
+                <td>@Html.ActionLink(storage.Name, "SelectProductsInStorage", "Warehouse", new { storageName = storage.Name })</td>
                 <td>@storage.Territory</td>
                 <td>@storage.City</td>
             </tr>
         }
     </table>
+    @using (Html.BeginForm("Add", "Storage", FormMethod.Get))
+    {
+        <button>Добавить</button>
+    }
 </div>

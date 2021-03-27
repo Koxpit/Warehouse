@@ -8,11 +8,27 @@ namespace Warehouse.Database
 {
     public static class FirstData
     {
+        public static Dictionary<string, int> codesNumBoxes;
+        public static Dictionary<string, DateTime> partyTerm;
+
         public static void Initialize(WarehouseContext context)
         {
+            codesNumBoxes = new Dictionary<string, int>()
+            {
+                { "6743", 64 },
+                { "7826", 144 },
+                { "15976", 200 }
+            };
+
+            partyTerm = new Dictionary<string, DateTime>()
+            {
+                {"S000000001", Convert.ToDateTime("28.07.2021") },
+                {"S000000002", Convert.ToDateTime("20.02.2022") }
+            };
+
+            InitPassports(context);
             InitWorkers(context);
             InitVehicle(context);
-            InitPassports(context);
             InitStorage(context);
             InitProducts(context);
             InitCargos(context);
@@ -21,6 +37,86 @@ namespace Warehouse.Database
             InitPlaces(context);
         }
 
+        private static void InitPassports(WarehouseContext context)
+        {
+            if (!context.Passports.Any())
+            {
+                context.Passports.AddRange(
+                    new Passport
+                    {
+                        Series = "4415",
+                        Number = "900320",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("01.02.2010")
+                    },
+                    new Passport
+                    {
+                        Series = "4542",
+                        Number = "900321",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("04.03.2011")
+                    },
+                    new Passport
+                    {
+                        Series = "4418",
+                        Number = "900324",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("20.01.2012")
+                    },
+                    new Passport
+                    {
+                        Series = "4417",
+                        Number = "900329",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("17.08.2016")
+                    },
+                    new Passport
+                    {
+                        Series = "4420",
+                        Number = "900327",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("12.04.2009")
+                    },
+                    new Passport
+                    {
+                        Series = "4440",
+                        Number = "900330",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("11.06.2018")
+                    },
+                    new Passport
+                    {
+                        Series = "4441",
+                        Number = "901001",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("19.01.2012")
+                    },
+                    new Passport
+                    {
+                        Series = "4499",
+                        Number = "901310",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("13.08.2016")
+                    },
+                    new Passport
+                    {
+                        Series = "4456",
+                        Number = "901326",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("18.04.2009")
+                    },
+                    new Passport
+                    {
+                        Series = "4378",
+                        Number = "901456",
+                        IssuedAt = "МСК МУНИЦ МО РФ",
+                        IssuedWas = Convert.ToDateTime("17.06.2018")
+                    }
+                );
+
+                context.SaveChanges();
+            }
+        }
         private static void InitWorkers(WarehouseContext context)
         {
             if (!context.Workers.Any())
@@ -33,7 +129,8 @@ namespace Warehouse.Database
                         PhoneNumber = "89953468162",
                         Number = "00001",
                         Position = "Грузчик",
-                        Experience = 1
+                        Experience = 1,
+                        PassportId = 1
                     },
                     new Worker
                     {
@@ -42,7 +139,8 @@ namespace Warehouse.Database
                         PhoneNumber = "89953468500",
                         Number = "00002",
                         Position = "Грузчик",
-                        Experience = 2
+                        Experience = 2,
+                        PassportId = 2
                     },
                     new Worker
                     {
@@ -51,7 +149,8 @@ namespace Warehouse.Database
                         PhoneNumber = "89953468345",
                         Number = "10001",
                         Position = "Погрузчик",
-                        Experience = 3
+                        Experience = 3,
+                        PassportId = 3
                     },
                     new Worker
                     {
@@ -60,7 +159,8 @@ namespace Warehouse.Database
                         PhoneNumber = "89953468999",
                         Number = "10002",
                         Position = "Погрузчик",
-                        Experience = 2
+                        Experience = 2,
+                        PassportId = 4
                     },
                     new Worker
                     {
@@ -69,7 +169,8 @@ namespace Warehouse.Database
                         PhoneNumber = "89953468533",
                         Number = "20001",
                         Position = "Кладовщик",
-                        Experience = 1
+                        Experience = 1,
+                        PassportId = 5
                     },
                     new Worker
                     {
@@ -78,7 +179,8 @@ namespace Warehouse.Database
                         PhoneNumber = "89953468532",
                         Number = "20002",
                         Position = "Старший кладовщик",
-                        Experience = 5
+                        Experience = 5,
+                        PassportId = 6
                     }
                 );
 
@@ -95,28 +197,32 @@ namespace Warehouse.Database
                         FIO = "Самсонов Владимир Геннадьевич",
                         Birthday = Convert.ToDateTime("02.06.1982"),
                         PhoneNumber = "89155326672",
-                        Experience = 5
+                        Experience = 5,
+                        PassportId = 7
                     },
                     new Driver
                     {
                         FIO = "Вишняков Рудольф Мартынович",
                         Birthday = Convert.ToDateTime("11.10.1975"),
                         PhoneNumber = "89155326102",
-                        Experience = 10
+                        Experience = 10,
+                        PassportId = 8
                     },
                     new Driver
                     {
                         FIO = "Симонов Корнелий Якунович",
                         Birthday = Convert.ToDateTime("22.11.1979"),
                         PhoneNumber = "89155326188",
-                        Experience = 9
+                        Experience = 9,
+                        PassportId = 9
                     },
                     new Driver
                     {
                         FIO = "Шарапов Иннокентий Федосеевич",
                         Birthday = Convert.ToDateTime("23.04.1999"),
                         PhoneNumber = "89155326001",
-                        Experience = 3
+                        Experience = 3,
+                        PassportId = 10
                     }
                 );
 
@@ -156,96 +262,6 @@ namespace Warehouse.Database
                 context.SaveChanges();
             }
         }
-        private static void InitPassports(WarehouseContext context)
-        {
-            if (!context.Passports.Any())
-            {
-                context.Passports.AddRange(
-                    new Passport
-                    {
-                        Series = "4415",
-                        Number = "900320",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("01.02.2010"),
-                        PersonId = 1
-                    },
-                    new Passport
-                    {
-                        Series = "4542",
-                        Number = "900321",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("04.03.2011"),
-                        PersonId = 2
-                    },
-                    new Passport
-                    {
-                        Series = "4418",
-                        Number = "900324",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("20.01.2012"),
-                        PersonId = 3
-                    },
-                    new Passport
-                    {
-                        Series = "4417",
-                        Number = "900329",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("17.08.2016"),
-                        PersonId = 4
-                    },
-                    new Passport
-                    {
-                        Series = "4420",
-                        Number = "900327",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("12.04.2009"),
-                        PersonId = 5
-                    },
-                    new Passport
-                    {
-                        Series = "4440",
-                        Number = "900330",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("11.06.2018"),
-                        PersonId = 6
-                    },
-                    new Passport
-                    {
-                        Series = "4441",
-                        Number = "901001",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("19.01.2012"),
-                        PersonId = 7
-                    },
-                    new Passport
-                    {
-                        Series = "4499",
-                        Number = "901310",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("13.08.2016"),
-                        PersonId = 8
-                    },
-                    new Passport
-                    {
-                        Series = "4456",
-                        Number = "901326",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("18.04.2009"),
-                        PersonId = 9
-                    },
-                    new Passport
-                    {
-                        Series = "4378",
-                        Number = "901456",
-                        IssuedAt = "МСК МУНИЦ МО РФ",
-                        IssuedWas = Convert.ToDateTime("17.06.2018"),
-                        PersonId = 10
-                    }
-                );
-
-                context.SaveChanges();
-            }
-        }
         private static void InitStorage(WarehouseContext context)
         {
             if (!context.Storages.Any())
@@ -276,34 +292,31 @@ namespace Warehouse.Database
                     new Product
                     {
                         Name = "Хрустим Багет Томат и Зелень 60г 24X",
-                        Code = "00001006743",
+                        Code = "6743",
                         Party = "S000000001",
-                        DateOfManufacture = Convert.ToDateTime("11.03.2021"),
                         Term = Convert.ToDateTime("28.07.21"),
-                        CodeOfPallete = "KA00000001",
-                        BoxesInPallete = 64,
+                        Comment = "",
+                        BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "6743").Value,
                         Cost = 8000
                     },
                     new Product
                     {
                         Name = "Лейз Из Печи Королевский Краб 85г 12X",
-                        Code = "00002007826",
+                        Code = "7826",
                         Party = "S000000001",
-                        DateOfManufacture = Convert.ToDateTime("11.03.2021"),
                         Term = Convert.ToDateTime("28.07.21"),
-                        CodeOfPallete = "KA00000002",
-                        BoxesInPallete = 144,
+                        Comment = "",
+                        BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "7826").Value,
                         Cost = 12000
                     },
                     new Product
                     {
                         Name = "Лейз Стакс Зеленый Лук 140г 9X",
-                        Code = "000010015976",
+                        Code = "15976",
                         Party = "S000000002",
-                        DateOfManufacture = Convert.ToDateTime("20.02.2021"),
-                        Term = Convert.ToDateTime("20.02.2022"),
-                        CodeOfPallete = "KA00000003",
-                        BoxesInPallete = 200,
+                        Term = Convert.ToDateTime("20.02.22"),
+                        Comment = "",
+                        BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "15976").Value,
                         Cost = 32000
                     }
                 );
@@ -397,7 +410,7 @@ namespace Warehouse.Database
                     new Place
                     {
                         Sector = "1",
-                        Number = "001",
+                        Number = "1",
                         StorageId = 1,
                         ProductId = 1,
                         NumOfPalletes = 11
@@ -405,7 +418,7 @@ namespace Warehouse.Database
                     new Place
                     {
                         Sector = "1",
-                        Number = "002",
+                        Number = "2",
                         StorageId = 1,
                         ProductId = 2,
                         NumOfPalletes = 11
@@ -413,7 +426,7 @@ namespace Warehouse.Database
                     new Place
                     {
                         Sector = "1",
-                        Number = "001",
+                        Number = "1",
                         StorageId = 1,
                         ProductId = 3,
                         NumOfPalletes = 11

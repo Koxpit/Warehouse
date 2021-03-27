@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Warehouse.Models
 {
-    public class Customer : Person
+    public class Customer
     {
-        public override int ID { get; set; }
-        public override string FIO { get; set; }
-        public override string PhoneNumber { get; set; }
+        public int ID { get; set; }
+        public string FIO { get; set; }
+        public string PhoneNumber { get; set; }
         public string CompanyName { get; set; }
         public string City { get; set; }
     }

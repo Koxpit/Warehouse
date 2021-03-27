@@ -417,3 +417,13 @@ C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Програ�
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Warehouse\Storages.cshtml.g.cs
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Warehouse.csprojAssemblyReference.cache
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Warehouse\Index.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Product\Add.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Product\Edit.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Product\Delete.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Order\Add.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Order\Edit.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Order\Info.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Storage\Add.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Storage\Edit.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Worker\Add.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Worker\Edit.cshtml.g.cs

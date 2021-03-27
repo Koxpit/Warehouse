@@ -36,18 +36,20 @@ namespace Warehouse.Controllers
             return View(indexViewModel);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult GetSelectedProducts(string code, string party)
         {
             List<Place> selectedProducts;
 
             if (String.IsNullOrWhiteSpace(party))
             {
-                selectedProducts = _db.Places.Include(p => p.Product).Where(p => p.Product.Code == code).ToList();
+                selectedProducts = _db.Places.Include(p => p.Product).Include(s => s.Storage)
+                    .Where(p => p.Product.Code == code).ToList();
             }
             else
             {
-                selectedProducts = _db.Places.Include(p => p.Product).Where(p => p.Product.Code == code && p.Product.Party == party).ToList();
+                selectedProducts = _db.Places.Include(p => p.Product).Include(s => s.Storage)
+                    .Where(p => p.Product.Code == code && p.Product.Party == party).ToList();
             }
 
             var productsViewModel = new ProductsViewModel
@@ -58,10 +60,11 @@ namespace Warehouse.Controllers
             return View("Products", productsViewModel);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult SelectProductsInStorage(string storageName)
         {
-            List<Place> selectedProducts =_db.Places.Include(p => p.Product).Include(s => s.Storage).Where(s => s.Storage.Name == storageName).ToList();
+            List<Place> selectedProducts =_db.Places.Include(p => p.Product).Include(s => s.Storage)
+                .Where(s => s.Storage.Name == storageName).ToList();
 
             var productsViewModel = new ProductsViewModel
             {
@@ -71,7 +74,7 @@ namespace Warehouse.Controllers
             return View("Products", productsViewModel);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult GetStorages()
         {
             List<Storage> storages = _db.Storages.ToList();
@@ -100,7 +103,12 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Products()
         {
-            var products = _db.Places.Include(p => p.Product).ToList();
+            var storages = _db.Storages.Distinct().ToList();
+            List<Place> products = new List<Place>();
+
+            foreach (var item in storages)
+                products.AddRange(_db.Places.Include(p => p.Product).Include(s => s.Storage).Where(s => s.Storage.Name == item.Name).ToList());
+
             var productsViewModel = new ProductsViewModel
             {
                 Products = products

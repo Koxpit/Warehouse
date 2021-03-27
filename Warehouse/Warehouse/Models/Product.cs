@@ -13,7 +13,7 @@ namespace Warehouse.Models
         public string Party { get; set; }
         public DateTime DateOfManufacture { get; set; }
         public DateTime Term { get; set; }
-        public string CodeOfPallete { get; set; }
+        public string Comment { get; set; }
         public int BoxesInPallete { get; set; }
         public decimal Cost { get; set; }
     }

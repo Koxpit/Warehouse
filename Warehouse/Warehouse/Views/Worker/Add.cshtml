@@ -1,0 +1,50 @@
+﻿@model Warehouse.Models.Worker
+@{
+    ViewData["Title"] = "Добавление работника";
+}
+
+<h3>Форма добавления работника</h3>
+@using (Html.BeginForm("Add", "Worker", FormMethod.Post))
+{
+    <p>
+        @Html.LabelFor(m => m.FIO, "ФИО")
+        @Html.TextBoxFor(m => m.FIO)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Birthday, "Дата рождения")
+        @Html.TextBoxFor(m => m.Birthday)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Position, "Должность")
+        @Html.TextBoxFor(m => m.Position)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Experience, "Опыт работы")
+        @Html.TextBoxFor(m => m.Experience)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.PhoneNumber, "Номер телефона")
+        @Html.TextBoxFor(m => m.PhoneNumber)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Number, "Табельный номер")
+        @Html.TextBoxFor(m => m.Number)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Passport.Series, "Серия паспорта")
+        @Html.TextBoxFor(m => m.Passport.Series)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Passport.Number, "Номер паспорта")
+        @Html.TextBoxFor(m => m.Passport.Number)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Passport.IssuedAt, "Кем выдан")
+        @Html.TextBoxFor(m => m.Passport.IssuedAt)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Passport.IssuedWas, "Когда выдан")
+        @Html.TextBoxFor(m => m.Passport.IssuedWas)
+    </p>
+    <p><input type="submit" value="Добавить" /></p>
+}

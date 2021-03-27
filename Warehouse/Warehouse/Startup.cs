@@ -71,6 +71,30 @@ namespace Warehouse
                 endpoints.MapControllerRoute(
                     name: "products",
                     pattern: "{controller=Warehouse}/{action=Products}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "addProduct",
+                    pattern: "{controller=Product}/{action=Add}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "deleteProduct",
+                    pattern: "{controller=Product}/{action=Delete}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "editProduct",
+                    pattern: "{controller=Product}/{action=Edit}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "infoOrder",
+                    pattern: "{controller=Order}/{action=Info}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "editOrder",
+                    pattern: "{controller=Order}/{action=Edit}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "deleteOrder",
+                    pattern: "{controller=Order}/{action=Delete}/{id?}");
             });
         }
     }

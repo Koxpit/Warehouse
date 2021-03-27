@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 
 namespace Warehouse.Models
 {
-    public class Driver : Person
+    public class Driver
     {
-        public override int ID { get; set; }
-        public override string FIO { get; set; }
-        public override string PhoneNumber { get; set; }
+        public int ID { get; set; }
+        public string FIO { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime Birthday { get; set; }
         public int Experience { get; set; }
+
+        public int? PassportId { get; set; }
+        public Passport Passport { get; set; }
     }
 }

@@ -1,0 +1,23 @@
+﻿@model Warehouse.Models.Storage
+@{
+    ViewData["Title"] = "Добавление склада";
+}
+
+<h3>Форма добавления продукта</h3>
+@using (Html.BeginForm("Add", "Storage", FormMethod.Post))
+{
+    <p>
+        @Html.LabelFor(m => m.Name, "Наименование склада")
+        @Html.TextBoxFor(m => m.Name)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Territory, "Территория склада")
+        @Html.TextBoxFor(m => m.Territory)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.City, "Город")
+        @Html.TextBoxFor(m => m.City)
+    </p>
+    <p><input type="submit" value="Добавить" /></p>
+}
+

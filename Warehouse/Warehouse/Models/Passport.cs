@@ -12,8 +12,5 @@ namespace Warehouse.Models
         public string Number { get; set; }
         public string IssuedAt { get; set; }
         public DateTime IssuedWas { get; set; }
-
-        public int PersonId { get; set; }
-        public Person Person { get; set; }
     }
 }

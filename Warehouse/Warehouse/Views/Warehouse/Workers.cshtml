@@ -36,4 +36,8 @@
             </tr>
         }
     </table>
+    @using (Html.BeginForm("Add", "Worker", FormMethod.Get))
+    {
+        <button>Добавить</button>
+    }
 </div>

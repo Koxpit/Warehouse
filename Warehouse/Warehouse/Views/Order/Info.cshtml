@@ -1,0 +1,47 @@
+﻿@model Warehouse.Models.Order
+@{
+    ViewData["Title"] = "Order Info";
+}
+
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Заказ @Model.ID</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>Тип</td>
+            <td>Плановое время</td>
+            <td>Заказчик</td>
+            <td>Компания</td>
+            <td>Город</td>
+            <td>Номер телефона</td>
+        </tr>
+        <tr align="center">
+            <td>@Model.Type</td>
+            <td>@Model.ArrivalTime</td>
+            <td>@Model.Customer.FIO</td>
+            <td>@Model.Customer.CompanyName</td>
+            <td>@Model.Customer.City</td>
+            <td>@Model.Customer.PhoneNumber</td>
+        </tr>
+    </table>
+    @using (Html.BeginForm("Delete", "Order", FormMethod.Post))
+    {
+        <button>Удалить</button>
+    }
+    @using (Html.BeginForm("Edit", "Order", FormMethod.Post))
+    {
+        <button>Редактировать</button>
+    }
+</div>

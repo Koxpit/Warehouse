@@ -5,14 +5,17 @@ using System.Threading.Tasks;
 
 namespace Warehouse.Models
 {
-    public class Worker : Person
+    public class Worker
     {
-        public override int ID { get; set; }
-        public override string FIO { get; set; }
-        public override string PhoneNumber { get; set; }
+        public int ID { get; set; }
+        public string FIO { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime Birthday { get; set; }
         public int Experience { get; set; }
         public string Position { get; set; }
         public string Number { get; set; }
+
+        public int? PassportId { get; set; }
+        public Passport Passport { get; set; }
     }
 }
