@@ -25,18 +25,33 @@ namespace Warehouse.Controllers
         {
             string storageName = place.Storage.Name;
             string territoryStorage = place.Storage.Territory;
+            var foundStorage = _db.Storages.FirstOrDefault(x => x.Name == storageName && x.Territory == territoryStorage);
 
-            var storage = _db.Storages.FirstOrDefault(x => x.Name == storageName && x.Territory == territoryStorage);
-
-            if (!_db.Storages.Contains(storage))
+            if (!_db.Storages.Contains(foundStorage))
+                return Content("Склад не существует");
+            else
             {
-                return View("Склад не существует");
+                place.Storage = foundStorage;
+                place.StorageId = foundStorage.ID;
             }
 
-            place.Product.BoxesInPallete = FirstData.codesNumBoxes.FirstOrDefault(x => x.Key == place.Product.Code).Value;
-            place.Product.Party = FirstData.partyTerm.FirstOrDefault(x => x.Value == Convert.ToDateTime(place.Product.Term)).Key;
-            place.Storage = storage;
-            place.StorageId = storage.ID;
+            var foundCode = _db.Products.Select(x => x.Code)
+                .FirstOrDefault(code => code == place.Product.Code);
+
+            if (foundCode == null && place.Product.BoxesInPallete == 0)
+                return Content("Введите количество коробов");
+            if (foundCode != null)
+                place.Product.BoxesInPallete = FirstData.codesNumBoxes
+                    .FirstOrDefault(x => x.Key == place.Product.Code).Value;
+
+            var foundTerm = _db.Products.Select(x => x.Term)
+                .FirstOrDefault(term => term == place.Product.Term);
+
+            if (foundTerm == DateTime.MinValue && place.Product.Party == null)
+                return Content("Введите партию");
+            if (foundTerm != DateTime.MinValue)
+                place.Product.Party = FirstData.partyTerm
+                    .FirstOrDefault(x => x.Value == Convert.ToDateTime(place.Product.Term)).Key;
 
             _db.Places.Add(place);
             await _db.SaveChangesAsync();
@@ -50,6 +65,7 @@ namespace Warehouse.Controllers
             ViewBag.StorageNames = _db.Storages.Select(s => s.Name).Distinct().ToList();
             ViewBag.StorageTerritories = _db.Storages.Select(s => s.Territory).Distinct().ToList();
             ViewBag.Products = _db.Products.ToList();
+            ViewBag.Codes = _db.Products.Select(x => x.Code).Distinct().ToList();
 
             return View();
         }

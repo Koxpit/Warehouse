@@ -8,7 +8,7 @@
 {
     <p>
         @Html.LabelFor(m => m.Storage.Name, "Наименование склада")
-        @Html.TextBoxFor(m => m.Storage.Name, new { list = "namesStorages" })
+        @Html.TextBoxFor(m => m.Storage.Name, new { list = "namesStorages", @required = "required" })
         <datalist id="namesStorages">
             @foreach (var name in ViewBag.StorageNames)
             {
@@ -18,7 +18,7 @@
     </p>
     <p>
         @Html.LabelFor(m => m.Storage.Name, "Территория склада")
-        @Html.TextBoxFor(m => m.Storage.Territory, new { list = "territoriesStorages" })
+        @Html.TextBoxFor(m => m.Storage.Territory, new { list = "territoriesStorages", @required = "required" })
         <datalist id="territoriesStorages">
             @foreach (var territory in ViewBag.StorageTerritories)
             {
@@ -28,23 +28,23 @@
     </p>
     <p>
         @Html.LabelFor(m => m.Sector, "Сектор")
-        @Html.TextBoxFor(m => m.Sector)
+        @Html.TextBoxFor(m => m.Sector, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Number, "Ряд")
-        @Html.TextBoxFor(m => m.Number)
+        @Html.TextBoxFor(m => m.Number, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Product.Name, "Наименование продукции")
-        @Html.TextBoxFor(m => m.Product.Name)
+        @Html.TextBoxFor(m => m.Product.Name, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Product.Code, "Код продукта")
-        @Html.TextBoxFor(m => m.Product.Code, new { list = "codeProducts" })
+        @Html.TextBoxFor(m => m.Product.Code, new { list = "codeProducts", @required = "required" })
         <datalist id="codeProducts">
-            @foreach (var item in ViewBag.Products)
+            @foreach (var code in ViewBag.Codes)
             {
-                <option value="@item.Code">@item.Code</option>
+                <option value="@code">@code</option>
             }
         </datalist>
     </p>
@@ -58,15 +58,19 @@
     </p>
     <p>
         @Html.LabelFor(m => m.Product.Term, "Срок")
-        @Html.TextBoxFor(m => m.Product.Term, "", new { type = "date" })
+        @Html.TextBoxFor(m => m.Product.Term, "", new { type = "date", @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Comment, "Примечания")
+        @Html.TextBoxFor(m => m.Product.Comment)
     </p>
     <p>
         @Html.LabelFor(m => m.NumOfPalletes, "Кол-во паллет")
-        @Html.TextBoxFor(m => m.NumOfPalletes)
+        @Html.TextBoxFor(m => m.NumOfPalletes, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Product.Cost, "Стоимость паллеты")
-        @Html.TextBoxFor(m => m.Product.Cost)
+        @Html.TextBoxFor(m => m.Product.Cost, new { @required = "required" })
     </p>
     <p><input type="submit" value="Добавить" /></p>
 }
