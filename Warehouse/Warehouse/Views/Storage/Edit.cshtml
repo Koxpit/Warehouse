@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Warehouse.Models.Storage
 @{
+    ViewData["Title"] = "Редактирование склада";
+}
+
+<h3>Форма редактирования склада</h3>
+@using (Html.BeginForm("Edit", "Storage", FormMethod.Post))
+{
+    @Html.Hidden("ID", Model.ID)
+<p>
+    @Html.LabelFor(m => m.Name, "Наименование склада")
+    @Html.TextBoxFor(m => m.Name, new { list = "names", @required = "required", @value = Model.Name })
+    <datalist id="names">
+        @foreach (var name in ViewBag.NamesStorages)
+        {
+            <option value="@name">@name</option>
+        }
+    </datalist>
+</p>
+<p>
+    @Html.LabelFor(m => m.Territory, "Территория склада")
+    @Html.TextBoxFor(m => m.Territory, new { list = "territories", @required = "required", @value = Model.Territory })
+    <datalist id="territories">
+        @foreach (var territory in ViewBag.StoragesTerritories)
+        {
+            <option value="@territory">@territory</option>
+        }
+    </datalist>
+</p>
+<p>
+    @Html.LabelFor(m => m.City, "Город")
+    @Html.TextBoxFor(m => m.City, new { list = "cities", @required = "required", @value = Model.City })
+    <datalist id="cities">
+        @foreach (var city in ViewBag.StoragesCities)
+        {
+            <option value="@city">@city</option>
+        }
+    </datalist>
+</p>
+    <p><input type="submit" value="Изменить" /></p>
 }

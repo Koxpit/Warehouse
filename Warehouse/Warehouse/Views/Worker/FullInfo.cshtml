@@ -1,0 +1,53 @@
+﻿@model Warehouse.Models.Worker
+@{
+    ViewData["Title"] = "Полная информация о сотруднике";
+}
+
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Полная информация о сотруднике №@Model.Number</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>ФИО</td>
+            <td>Номер телефона</td>
+            <td>Дата рождения</td>
+            <td>Опыт работы</td>
+            <td>Зарплата</td>
+            <td>Табельный номер</td>
+            <td>Должность</td>
+            <td>Серия паспорта</td>
+            <td>Номер паспорта</td>
+            <td>Кем выдан паспорт</td>
+            <td>Когда выдан паспорт</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td>@Model.FIO</td>
+            <td>@Model.PhoneNumber</td>
+            <td>@Model.Birthday.ToShortDateString()</td>
+            <td>@Model.Experience год/лет</td>
+            <td>@Model.Salary</td>
+            <td>@Model.Number</td>
+            <td>@Model.Position.Name</td>
+            <td>@Model.Passport.Series</td>
+            <td>@Model.Passport.Number</td>
+            <td>@Model.Passport.IssuedAt</td>
+            <td>@Model.Passport.IssuedWas.ToShortDateString()</td>
+            <td>@Html.ActionLink("Изменить", "Edit", "Worker", new { workerId = Model.ID })</td>
+            <td>@Html.ActionLink("Удалить", "Delete", "Worker", new { id = Model.ID })</td>
+        </tr>
+    </table>
+</div>

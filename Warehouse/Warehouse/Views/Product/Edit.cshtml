@@ -1,7 +1,77 @@
-﻿
+﻿@model Warehouse.Models.Place
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование";
 }
 
-<h1>Edit</h1>
-
+<h3>Форма редактирования продукта</h3>
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post))
+{
+    @Html.Hidden("ID", Model.ID)
+    <p>
+        @Html.LabelFor(m => m.Storage.Name, "Наименование склада")
+        @Html.TextBoxFor(m => m.Storage.Name, new { list = "namesStorages", @required = "required", @value = Model.Storage.Name })
+        <datalist id="namesStorages">
+            @foreach (var name in ViewBag.StorageNames)
+            {
+                <option value="@name">@name</option>
+            }
+        </datalist>
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Storage.Territory, "Территория склада")
+        @Html.TextBoxFor(m => m.Storage.Territory, new { list = "territoriesStorages", @required = "required", @value = Model.Storage.Territory })
+        <datalist id="territoriesStorages">
+            @foreach (var territory in ViewBag.StorageTerritories)
+            {
+                <option value="@territory">@territory</option>
+            }
+        </datalist>
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Sector, "Сектор")
+        @Html.TextBoxFor(m => m.Sector, new { @required = "required", @value = Model.Sector })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Number, "Ряд")
+        @Html.TextBoxFor(m => m.Number, new { @required = "required", @value = Model.Number })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Name, "Наименование продукции")
+        @Html.TextBoxFor(m => m.Product.Name, new { @required = "required", @value = Model.Product.Name })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Code, "Код продукта")
+        @Html.TextBoxFor(m => m.Product.Code, new { list = "codeProducts", @required = "required", @value = Model.Product.Code })
+        <datalist id="codeProducts">
+            @foreach (var code in ViewBag.Codes)
+            {
+                <option value="@code">@code</option>
+            }
+        </datalist>
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.BoxesInPallete, "Кол-во коробов в паллете")
+        @Html.TextBoxFor(m => m.Product.BoxesInPallete, new { @value = Model.Product.BoxesInPallete })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Party, "Партия")
+        @Html.TextBoxFor(m => m.Product.Party, new { @value = Model.Product.Party })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Term, "Срок")
+        @Html.TextBoxFor(m => m.Product.Term, "{0:yyyy-MM-dd}", new { type = "date", @required = "required", @value = Model.Product.Term })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Comment, "Примечания")
+        @Html.TextBoxFor(m => m.Product.Comment, new { @value = Model.Product.Comment })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.NumOfPalletes, "Кол-во паллет")
+        @Html.TextBoxFor(m => m.NumOfPalletes, new { @required = "required", @value = Model.NumOfPalletes })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.Cost, "Стоимость паллеты")
+        @Html.TextBoxFor(m => m.Product.Cost, new { @required = "required", @value = Model.Product.Cost })
+    </p>
+    <p><input type="submit" value="Принять" /></p>
+}

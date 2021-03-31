@@ -27,13 +27,13 @@
         </tr>
         @foreach (var worker in Model)
         {
-            <tr align="center">
-                <td>@worker.FIO</td>
-                <td>@worker.Birthday.ToShortDateString()</td>
-                <td>@worker.Experience</td>
-                <td>@worker.Position</td>
-                <td>@worker.Number</td>
-            </tr>
+    <tr align="center">
+        <td>@worker.FIO</td>
+        <td>@worker.Birthday.ToShortDateString()</td>
+        <td>@worker.Experience</td>
+        <td>@worker.Position.Name</td>
+        <td>@Html.ActionLink(worker.Number, "FullInfo", "Worker", new { number = worker.Number })</td>
+    </tr>
         }
     </table>
     @using (Html.BeginForm("Add", "Worker", FormMethod.Get))

@@ -3,20 +3,20 @@
     ViewData["Title"] = "Добавление склада";
 }
 
-<h3>Форма добавления продукта</h3>
+<h3>Форма добавления склада</h3>
 @using (Html.BeginForm("Add", "Storage", FormMethod.Post))
 {
     <p>
         @Html.LabelFor(m => m.Name, "Наименование склада")
-        @Html.TextBoxFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Territory, "Территория склада")
-        @Html.TextBoxFor(m => m.Territory)
+        @Html.TextBoxFor(m => m.Territory, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.City, "Город")
-        @Html.TextBoxFor(m => m.City)
+        @Html.TextBoxFor(m => m.City, new { @required = "required" })
     </p>
     <p><input type="submit" value="Добавить" /></p>
 }

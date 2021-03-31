@@ -91,7 +91,7 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Workers()
         {
-            return View(_db.Workers.ToList());
+            return View(_db.Workers.Include(x => x.Position).ToList());
         }
 
         [HttpGet]
@@ -103,11 +103,11 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Products()
         {
-            var storages = _db.Storages.Distinct().ToList();
+            var storagesNames = _db.Storages.Select(x => x.Name).Distinct().ToList();
             List<Place> products = new List<Place>();
 
-            foreach (var item in storages)
-                products.AddRange(_db.Places.Include(p => p.Product).Include(s => s.Storage).Where(s => s.Storage.Name == item.Name).ToList());
+            foreach (var name in storagesNames)
+                products.AddRange(_db.Places.Include(p => p.Product).Include(s => s.Storage).Where(s => s.Storage.Name == name).ToList());
 
             var productsViewModel = new ProductsViewModel
             {

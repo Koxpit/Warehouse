@@ -12,10 +12,13 @@ namespace Warehouse.Models
         public string PhoneNumber { get; set; }
         public DateTime Birthday { get; set; }
         public int Experience { get; set; }
-        public string Position { get; set; }
+        public decimal Salary { get; set; }
         public string Number { get; set; }
 
         public int? PassportId { get; set; }
         public Passport Passport { get; set; }
+
+        public int PositionId { get; set; }
+        public Position Position { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Warehouse.Database
             Database.EnsureCreated();
         }
 
+        public DbSet<Position> Positions { get; set; }
         public DbSet<Cargo> Cargos { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Worker> Workers { get; set; }

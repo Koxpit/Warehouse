@@ -26,6 +26,7 @@ namespace Warehouse.Database
                 {"S000000002", Convert.ToDateTime("20.02.2022") }
             };
 
+            InitPositions(context);
             InitPassports(context);
             InitWorkers(context);
             InitVehicle(context);
@@ -37,6 +38,29 @@ namespace Warehouse.Database
             InitPlaces(context);
         }
 
+        private static void InitPositions(WarehouseContext context)
+        {
+            if (!context.Positions.Any())
+            {
+                context.Positions.AddRange(
+                    new Position
+                    {
+                        Name = "Грузчик"
+                    },
+                    new Position
+                    {
+                        Name = "Погрузчик"
+                    },
+                    new Position
+                    {
+                        Name = "Кладовщик"
+                    },
+                    new Position
+                    {
+                        Name = "Старший кладовщик"
+                    });
+            }
+        }
         private static void InitPassports(WarehouseContext context)
         {
             if (!context.Passports.Any())
@@ -128,7 +152,8 @@ namespace Warehouse.Database
                         Birthday = Convert.ToDateTime("22.07.1998"),
                         PhoneNumber = "89953468162",
                         Number = "00001",
-                        Position = "Грузчик",
+                        Salary = 30000,
+                        PositionId = 1,
                         Experience = 1,
                         PassportId = 1
                     },
@@ -138,7 +163,8 @@ namespace Warehouse.Database
                         Birthday = Convert.ToDateTime("11.05.1989"),
                         PhoneNumber = "89953468500",
                         Number = "00002",
-                        Position = "Грузчик",
+                        Salary = 30000,
+                        PositionId = 1,
                         Experience = 2,
                         PassportId = 2
                     },
@@ -148,7 +174,8 @@ namespace Warehouse.Database
                         Birthday = Convert.ToDateTime("25.02.1986"),
                         PhoneNumber = "89953468345",
                         Number = "10001",
-                        Position = "Погрузчик",
+                        Salary = 40000,
+                        PositionId = 2,
                         Experience = 3,
                         PassportId = 3
                     },
@@ -158,7 +185,8 @@ namespace Warehouse.Database
                         Birthday = Convert.ToDateTime("10.09.1987"),
                         PhoneNumber = "89953468999",
                         Number = "10002",
-                        Position = "Погрузчик",
+                        Salary = 40000,
+                        PositionId = 2,
                         Experience = 2,
                         PassportId = 4
                     },
@@ -168,7 +196,7 @@ namespace Warehouse.Database
                         Birthday = Convert.ToDateTime("21.10.1995"),
                         PhoneNumber = "89953468533",
                         Number = "20001",
-                        Position = "Кладовщик",
+                        PositionId = 3,
                         Experience = 1,
                         PassportId = 5
                     },
@@ -178,7 +206,8 @@ namespace Warehouse.Database
                         Birthday = Convert.ToDateTime("20.01.1972"),
                         PhoneNumber = "89953468532",
                         Number = "20002",
-                        Position = "Старший кладовщик",
+                        Salary = 50000,
+                        PositionId = 4,
                         Experience = 5,
                         PassportId = 6
                     }

@@ -31,6 +31,8 @@
             <td>Примечания</td>
             <td>Стоимость</td>
             <td>Кол-во паллет</td>
+            <td></td>
+            <td></td>
         </tr>
         @foreach (var item in Model.Products)
         {
@@ -47,6 +49,8 @@
         <td>@item.Product.Comment</td>
         <td>@item.Product.Cost</td>
         <td>@item.NumOfPalletes</td>
+        <td>@Html.ActionLink("Изменить", "Edit", "Product", new { placeId = item.ID })</td>
+        <td>@Html.ActionLink("Удалить", "Delete", "Product", new { id = item.ID })</td>
     </tr>
         }
     </table>
