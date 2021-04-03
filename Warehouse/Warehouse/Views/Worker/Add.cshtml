@@ -8,43 +8,54 @@
 {
     <p>
         @Html.LabelFor(m => m.FIO, "ФИО")
-        @Html.TextBoxFor(m => m.FIO)
+        @Html.TextBoxFor(m => m.FIO, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Birthday, "Дата рождения")
-        @Html.TextBoxFor(m => m.Birthday)
+        @Html.TextBoxFor(m => m.Birthday, new { type = "date", @required = "required" })
     </p>
     <p>
-        @Html.LabelFor(m => m.Position, "Должность")
-        @Html.TextBoxFor(m => m.Position)
+        @Html.LabelFor(m => m.Position.Name, "Должность")
+        @Html.TextBoxFor(m => m.Position.Name, new { list = "positions", @required = "required" })
+        <datalist id="positions">
+            @foreach (var position in ViewBag.Positions)
+            {
+                <option value="@position">@position</option>
+            }
+        </datalist>
+
     </p>
     <p>
         @Html.LabelFor(m => m.Experience, "Опыт работы")
-        @Html.TextBoxFor(m => m.Experience)
+        @Html.TextBoxFor(m => m.Experience, new { type = "number", @required = "required", maxLength = 2 })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Salary, "Зарплата")
+        @Html.TextBoxFor(m => m.Salary, new { type = "number", @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.PhoneNumber, "Номер телефона")
-        @Html.TextBoxFor(m => m.PhoneNumber)
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @required = "required", maxLength = 11, minlength = 11 })
     </p>
     <p>
         @Html.LabelFor(m => m.Number, "Табельный номер")
-        @Html.TextBoxFor(m => m.Number)
+        @Html.TextBoxFor(m => m.Number, new { type = "number", @required = "required", maxLength = 3 })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.Series, "Серия паспорта")
-        @Html.TextBoxFor(m => m.Passport.Series)
+        @Html.TextBoxFor(m => m.Passport.Series, new { @required = "required", maxLength = 4, minlength = 4 })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.Number, "Номер паспорта")
-        @Html.TextBoxFor(m => m.Passport.Number)
+        @Html.TextBoxFor(m => m.Passport.Number, new { @required = "required", maxLength = 6, minlength = 6 })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.IssuedAt, "Кем выдан")
-        @Html.TextBoxFor(m => m.Passport.IssuedAt)
+        @Html.TextBoxFor(m => m.Passport.IssuedAt, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.IssuedWas, "Когда выдан")
-        @Html.TextBoxFor(m => m.Passport.IssuedWas)
+        @Html.TextBoxFor(m => m.Passport.IssuedWas, new { type = "date", @required = "required" })
     </p>
     <p><input type="submit" value="Добавить" /></p>
 }

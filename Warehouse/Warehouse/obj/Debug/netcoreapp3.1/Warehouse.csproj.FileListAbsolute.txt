@@ -429,3 +429,4 @@ C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Програ�
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Product\Delete.cshtml.g.cs
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Storage\Delete.cshtml.g.cs
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Worker\FullInfo.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Worker\Delete.cshtml.g.cs

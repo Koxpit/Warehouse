@@ -24,27 +24,115 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Worker worker)
         {
-            if (_db.Workers.FirstOrDefault(x => x.Passport.Series == worker.Passport.Series 
-            && x.Passport.Number == worker.Passport.Number
-            || x.PhoneNumber == worker.PhoneNumber) == null)
+            worker.Experience = Math.Abs(worker.Experience);
+            worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
+            worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
+
+            if (worker.Number.Length == 4)
+                SetWorkerNumber(ref worker, "");
+            else if (worker.Number.Length == 3)
+                SetWorkerNumber(ref worker, "0");
+            else if (worker.Number.Length == 2)
+                SetWorkerNumber(ref worker, "00");
+            else if (worker.Number.Length == 1)
+                SetWorkerNumber(ref worker, "000");
+
+            if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
+                return Content($"Должность {worker.Position.Name} недоступна.");
+
+            if (_db.Workers.FirstOrDefault(x => x.Number == worker.Number) != null)
+                return Content($"Сотрудник с табельным номером {worker.Number} уже существует.");
+
+            if (_db.Workers.FirstOrDefault(
+                x => x.Passport.Series == worker.Passport.Series && 
+                x.Passport.Number == worker.Passport.Number || 
+                x.PhoneNumber == worker.PhoneNumber) == null)
             {
                 _db.Workers.Add(worker);
                 await _db.SaveChangesAsync();
+            }
+            else
+            {
+                return Content("Сотрудник с введенными паспортными данными / номером телефона уже существует.");
             }
 
             return RedirectToAction("Workers", "Warehouse");
         }
 
+        private void SetWorkerNumber(ref Worker worker, string partOfNumber)
+        {
+            if (worker.Position.Name == "Грузчик")
+                worker.Number = "0" + partOfNumber + worker.Number;
+            else if (worker.Position.Name == "Погрузчик")
+                worker.Number = "1" + partOfNumber + worker.Number;
+            else if (worker.Position.Name == "Кладовщик" || worker.Position.Name == "Старший кладовщик")
+                worker.Number = "2" + partOfNumber + worker.Number;
+            else if (worker.Position.Name == "Диспетчер")
+                worker.Number = "3" + partOfNumber + worker.Number;
+        }
+
         [HttpGet]
         public IActionResult Add()
         {
+            ViewBag.Positions = _db.Positions.Select(x => x.Name).Distinct();
             return View();
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int workerId)
         {
-            return View();
+            ViewBag.Positions = _db.Positions.Select(x => x.Name).Distinct();
+            Worker currentWorker = _db.Workers.Include(x => x.Position).Include(x => x.Passport).FirstOrDefault(x => x.ID == workerId);
+
+            return View(currentWorker);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Worker worker)
+        {
+            worker.Experience = Math.Abs(worker.Experience);
+            worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
+            worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
+
+            if (worker.Number.Length == 4)
+                SetWorkerNumber(ref worker, "");
+            else if (worker.Number.Length == 3)
+                SetWorkerNumber(ref worker, "0");
+            else if (worker.Number.Length == 2)
+                SetWorkerNumber(ref worker, "00");
+            else if (worker.Number.Length == 1)
+                SetWorkerNumber(ref worker, "000");
+
+            if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
+                return Content($"Должность {worker.Position.Name} недоступна.");
+
+            if (_db.Workers.FirstOrDefault(x => x.Number == worker.Number && x.ID != worker.ID) != null)
+                return Content($"Сотрудник с табельным номером {worker.Number} уже существует.");
+
+            if (_db.Workers.FirstOrDefault(
+                x => x.Passport.Series == worker.Passport.Series &&
+                x.ID != worker.ID &&
+                x.Passport.Number == worker.Passport.Number ||
+                x.PhoneNumber == worker.PhoneNumber && 
+                x.ID != worker.ID) != null)
+                return Content("Сотрудник с введенными паспортными данными / номером телефона уже существует.");
+
+            Worker currentWorker = _db.Workers.Include(x => x.Passport).FirstOrDefault(x => x.ID == worker.ID);
+            currentWorker.FIO = worker.FIO;
+            currentWorker.Birthday = worker.Birthday;
+            currentWorker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
+            currentWorker.Experience = worker.Experience;
+            currentWorker.Salary = worker.Salary;
+            currentWorker.PhoneNumber = worker.PhoneNumber;
+            currentWorker.Passport.Series = worker.Passport.Series;
+            currentWorker.Passport.Number = worker.Passport.Number;
+            currentWorker.Passport.IssuedAt = worker.Passport.IssuedAt;
+            currentWorker.Passport.IssuedWas = worker.Passport.IssuedWas;
+
+            _db.Workers.Update(currentWorker);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Workers", "Warehouse");
         }
 
         [HttpGet]

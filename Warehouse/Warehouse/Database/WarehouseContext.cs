@@ -25,5 +25,10 @@ namespace Warehouse.Database
         public DbSet<Place> Places { get; set; }
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Position>().HasIndex(x => new { x.Name }).IsUnique();
+        }
     }
 }
