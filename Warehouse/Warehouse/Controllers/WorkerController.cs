@@ -28,14 +28,7 @@ namespace Warehouse.Controllers
             worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
             worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
 
-            if (worker.Number.Length == 4)
-                SetWorkerNumber(ref worker, "");
-            else if (worker.Number.Length == 3)
-                SetWorkerNumber(ref worker, "0");
-            else if (worker.Number.Length == 2)
-                SetWorkerNumber(ref worker, "00");
-            else if (worker.Number.Length == 1)
-                SetWorkerNumber(ref worker, "000");
+            SetWorkerNumber(ref worker);
 
             if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
                 return Content($"Должность {worker.Position.Name} недоступна.");
@@ -59,16 +52,27 @@ namespace Warehouse.Controllers
             return RedirectToAction("Workers", "Warehouse");
         }
 
-        private void SetWorkerNumber(ref Worker worker, string partOfNumber)
+        private void SetWorkerNumber(ref Worker worker)
         {
-            if (worker.Position.Name == "Грузчик")
-                worker.Number = "0" + partOfNumber + worker.Number;
-            else if (worker.Position.Name == "Погрузчик")
-                worker.Number = "1" + partOfNumber + worker.Number;
-            else if (worker.Position.Name == "Кладовщик" || worker.Position.Name == "Старший кладовщик")
-                worker.Number = "2" + partOfNumber + worker.Number;
-            else if (worker.Position.Name == "Диспетчер")
-                worker.Number = "3" + partOfNumber + worker.Number;
+            string partOfWorkerNumber = "";
+
+            for (int i = worker.Number.Length; i < 5; i++)
+                partOfWorkerNumber += "0";
+
+            partOfWorkerNumber += worker.Number;
+            worker.Number = GetWorkerNumberByPosition(worker.Position.Name) + partOfWorkerNumber;
+        }
+
+        private string GetWorkerNumberByPosition(string positionName)
+        {
+            if (positionName == "Грузчик")
+                return "0";
+            else if (positionName == "Погрузчик")
+                return "1";
+            else if (positionName == "Кладовщик" || positionName == "Старший кладовщик")
+                return "2";
+
+            return "3";
         }
 
         [HttpGet]
@@ -94,14 +98,7 @@ namespace Warehouse.Controllers
             worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
             worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
 
-            if (worker.Number.Length == 4)
-                SetWorkerNumber(ref worker, "");
-            else if (worker.Number.Length == 3)
-                SetWorkerNumber(ref worker, "0");
-            else if (worker.Number.Length == 2)
-                SetWorkerNumber(ref worker, "00");
-            else if (worker.Number.Length == 1)
-                SetWorkerNumber(ref worker, "000");
+            SetWorkerNumber(ref worker);
 
             if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
                 return Content($"Должность {worker.Position.Name} недоступна.");

@@ -1,0 +1,27 @@
+﻿@model Warehouse.Models.Customer
+@{
+    ViewData["Title"] = "Редактирование заказчика";
+}
+
+<h3>Форма редактирования заказчика</h3>
+@using (Html.BeginForm("Edit", "Customer", FormMethod.Post))
+{
+    @Html.Hidden("ID", Model.ID)
+    <p>
+        @Html.LabelFor(m => m.FIO, "ФИО")
+        @Html.TextBoxFor(m => m.FIO, new { @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.PhoneNumber, "Номер телефона")
+        @Html.TextBoxFor(m => m.PhoneNumber, new { type = "date", @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.CompanyName, "Наименование компании")
+        @Html.TextBoxFor(m => m.CompanyName, new { @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.City, "Город")
+        @Html.TextBoxFor(m => m.City, new { @required = "required" })
+    </p>
+    <p><input type="submit" value="Изменить" /></p>
+}

@@ -1,0 +1,14 @@
+﻿@model Warehouse.Models.Position
+@{
+    ViewData["Title"] = "Добавление должности";
+}
+
+<h3>Форма добавления должности</h3>
+@using (Html.BeginForm("Add", "Position", FormMethod.Post))
+{
+    <p>
+        @Html.LabelFor(m => m.Name, "Наименование")
+        @Html.TextBoxFor(m => m.Name, new { @required = "required" })
+    </p>
+    <p><input type="submit" value="Добавить" /></p>
+}

@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Maps Storages";
+}
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+        height: 600px;
+        width: 1200px;
+    }
+    h1.wahouseTitle {
+        text-align: center;
+    }
+</style>
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 10,
+            center: { lat: 54.886909, lng: 38.078381 },
+        });
+        $.get("@Url.Action("GetStoragesJson", "Warehouse")", function (data) {
+            var markers = [];
+            var contentStrings = [];
+            var infowindows = [];
+
+            var storages = [];
+            data.data.forEach(function (storage) {
+                var el = [storage.name, storage.territory, storage.address, storage.geoLat, storage.geoLong];
+                if (storage[0]) el.push(storage[0]);
+                storages.push(el);
+            });
+
+            for (let i = 0; i < storages.length; i++) {
+                markers[i] = new google.maps.Marker({
+                    position: { lat: storages[i][3], lng: storages[i][4] },
+                    map: map,
+                });
+                contentStrings[i] =
+                    '<div id="content">' +
+                    '<div id="siteNotice">' +
+                    '</div>' +
+                '<h1 id="firstHeading" class="firstHeading">' + storages[i][0] + '</h1>' +
+                    '<div id="bodyContent">' +
+                '<p>Территория <b>' + storages[i][1] + '</b> - ' + storages[i][2] + '</p>' +
+                    '</div>' +
+                    '</div>';
+                infowindows[i] = new google.maps.InfoWindow({
+                    content: contentStrings[i],
+                });
+                markers[i].addListener("mouseover", () => {
+                    infowindows[i].open(map, markers[i]);
+                });
+                markers[i].addListener("mouseout", () => {
+                    infowindows[i].close(map, markers[i]);
+                });
+            }
+        });
+    }
+</script>
+<div class="row"><h1 class="wahouseTitle">Наши склады</h1></div>
+<div id="map"></div>
+
+<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-JsoUTs0SaGbYit1lPiMX57WIXzFTNQ&callback=initMap">
+</script>

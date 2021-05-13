@@ -1,0 +1,26 @@
+﻿@model Warehouse.Models.Customer
+@{
+    ViewData["Title"] = "Добавление заказчика";
+}
+
+<h3>Форма добавления заказчика</h3>
+@using (Html.BeginForm("Add", "Customer", FormMethod.Post))
+{
+    <p>
+        @Html.LabelFor(m => m.FIO, "ФИО")
+        @Html.TextBoxFor(m => m.FIO, new { @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.PhoneNumber, "Номер телефона")
+        @Html.TextBoxFor(m => m.PhoneNumber, new { type = "date", @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.CompanyName, "Наименование компании")
+        @Html.TextBoxFor(m => m.CompanyName, new { @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.City, "Город")
+        @Html.TextBoxFor(m => m.City, new { @required = "required" })
+    </p>
+    <p><input type="submit" value="Добавить" /></p>
+}

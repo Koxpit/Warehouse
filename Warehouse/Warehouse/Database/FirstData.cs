@@ -10,6 +10,7 @@ namespace Warehouse.Database
     {
         public static Dictionary<string, int> codesNumBoxes;
         public static Dictionary<string, DateTime> partyTerm;
+        public static Dictionary<string, string> codesParty;
 
         public static void Initialize(WarehouseContext context)
         {
@@ -22,8 +23,16 @@ namespace Warehouse.Database
 
             partyTerm = new Dictionary<string, DateTime>()
             {
-                {"S000000001", Convert.ToDateTime("28.07.2021") },
-                {"S000000002", Convert.ToDateTime("20.02.2022") }
+                {"S100000001", Convert.ToDateTime("28.07.2021") },
+                {"S200000001", Convert.ToDateTime("20.02.2022") },
+                {"S300000001", Convert.ToDateTime("19.02.2022") }
+            };
+
+            codesParty = new Dictionary<string, string>()
+            {
+                { "6743", "S100000001" },
+                { "7826", "S200000001" },
+                { "15976", "S300000001" }
             };
 
             InitPositions(context);
@@ -300,13 +309,17 @@ namespace Warehouse.Database
                     {
                         Name = "Модуль-5",
                         Territory = "ЗЯБ",
-                        City = "Ступино"
+                        Address = "РФ, МО, г.Ступино, ул.Транспортная, вл.22/2",
+                        GeoLat = 54.899057,
+                        GeoLong = 38.050520
                     },
                     new Storage
                     {
-                        Name = "СЗЯБ",
+                        Name = "Модуль-3",
                         Territory = "ЗЯБ",
-                        City = "Ступино"
+                        Address = "РФ, МО, г.Ступино, ул.Транспортная, вл.22/2",
+                        GeoLat = 54.898866,
+                        GeoLong = 38.047805
                     }
                 );
 
@@ -322,8 +335,8 @@ namespace Warehouse.Database
                     {
                         Name = "Хрустим Багет Томат и Зелень 60г 24X",
                         Code = "6743",
-                        Party = "S000000001",
-                        Term = Convert.ToDateTime("28.07.21"),
+                        Party = "S100000001",
+                        Term = partyTerm.FirstOrDefault(x => x.Key == "S100000001").Value,
                         Comment = "",
                         BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "6743").Value,
                         Cost = 8000
@@ -332,8 +345,8 @@ namespace Warehouse.Database
                     {
                         Name = "Лейз Из Печи Королевский Краб 85г 12X",
                         Code = "7826",
-                        Party = "S000000001",
-                        Term = Convert.ToDateTime("28.07.21"),
+                        Party = "S200000001",
+                        Term = partyTerm.FirstOrDefault(x => x.Key == "S200000001").Value,
                         Comment = "",
                         BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "7826").Value,
                         Cost = 12000
@@ -342,8 +355,8 @@ namespace Warehouse.Database
                     {
                         Name = "Лейз Стакс Зеленый Лук 140г 9X",
                         Code = "15976",
-                        Party = "S000000002",
-                        Term = Convert.ToDateTime("20.02.22"),
+                        Party = "S300000001",
+                        Term = partyTerm.FirstOrDefault(x => x.Key == "S300000001").Value,
                         Comment = "",
                         BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "15976").Value,
                         Cost = 32000

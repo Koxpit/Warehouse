@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Warehouse.Models.Position>
+@{
+    ViewData["Title"] = "Должности";
+}
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Список должностей компании</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>Наименование</td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var position in Model)
+        {
+            <tr align="center">
+                <td>@position.Name</td>
+                <td>@Html.ActionLink("Изменить", "Edit", "Position", new { positionId = position.ID })</td>
+                <td>@Html.ActionLink("Удалить", "Delete", "Position", new { positionId = position.ID })</td>
+            </tr>
+        }
+    </table>
+    @using (Html.BeginForm("Add", "Position", FormMethod.Get))
+    {
+        <button>Добавить</button>
+    }
+</div>

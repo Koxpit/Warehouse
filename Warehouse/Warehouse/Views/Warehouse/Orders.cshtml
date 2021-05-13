@@ -23,23 +23,29 @@
             <td>Тип</td>
             <td>Плановое время</td>
             <td>Грузы</td>
+            <td></td>
         </tr>
         @foreach (var order in Model.Orders)
         {
-    <tr align="center">
-        <td>@Html.ActionLink(order.ID.ToString(), "Info", "Order", new { orderId = order.ID })</td>
-        <td>@order.Type</td>
-        <td>@order.ArrivalTime.ToShortDateString()</td>
-        <td>
-            @foreach (var cargo in order.Cargos)
-            {
-                <p>Номер груза: @cargo.Number</p>
-                <p>Количество паллет: @cargo.NumOfPalletes</p>
-                <p>Наименование продукции: @cargo.Product.Name</p>
-            }
-        </td>
-    </tr>
+            <tr align="center">
+                <td>@Html.ActionLink(order.ID.ToString(), "Info", "Order", new { orderId = order.ID })</td>
+                <td>@order.Type</td>
+                <td>@order.ArrivalTime.ToShortDateString()</td>
+                <td>
+                    @foreach (var cargo in order.Cargos)
+                    {
+                        <p>Номер груза: @cargo.Number</p>
+                        <p>Количество паллет: @cargo.NumOfPalletes</p>
+                        <p>Наименование продукции: @cargo.Product.Name</p>
+                    }
+                </td>
+                <td>@Html.ActionLink("Добавить груз", "AddCargo", "Order", new { orderId = order.ID })</td>
+            </tr>
         }
     </table>
+    @using (Html.BeginForm("Add", "Order", FormMethod.Get))
+    {
+        <button>Добавить</button>
+    }
 </div>
 

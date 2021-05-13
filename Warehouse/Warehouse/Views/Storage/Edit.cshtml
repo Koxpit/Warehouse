@@ -28,14 +28,8 @@
     </datalist>
 </p>
 <p>
-    @Html.LabelFor(m => m.City, "Город")
-    @Html.TextBoxFor(m => m.City, new { list = "cities", @required = "required", @value = Model.City })
-    <datalist id="cities">
-        @foreach (var city in ViewBag.StoragesCities)
-        {
-            <option value="@city">@city</option>
-        }
-    </datalist>
+    @Html.LabelFor(m => m.Address, "Город")
+    @Html.TextBoxFor(m => m.Address, new { @required = "required", @value = Model.Address })
 </p>
     <p><input type="submit" value="Изменить" /></p>
 }

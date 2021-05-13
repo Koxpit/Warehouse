@@ -57,7 +57,15 @@ namespace Warehouse
                     pattern: "{controller=Warehouse}/{action=Workers}/{id?}");
 
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "mapsStorages",
+                    pattern: "{controller=Warehouse}/{action=MapsStorages}/{id?}");;
+
+                endpoints.MapControllerRoute(
+                    name: "email",
+                    pattern: "{controller=Warehouse}/{action=Email}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "drivers",
                     pattern: "{controller=Warehouse}/{action=Drivers}/{id?}");
 
                 endpoints.MapControllerRoute(
@@ -71,6 +79,10 @@ namespace Warehouse
                 endpoints.MapControllerRoute(
                     name: "products",
                     pattern: "{controller=Warehouse}/{action=Products}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "positions",
+                    pattern: "{controller=Warehouse}/{action=Positions}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "addProduct",
@@ -87,6 +99,10 @@ namespace Warehouse
                 endpoints.MapControllerRoute(
                     name: "infoOrder",
                     pattern: "{controller=Order}/{action=Info}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "addOrder",
+                    pattern: "{controller=Order}/{action=Add}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "editOrder",
@@ -123,6 +139,10 @@ namespace Warehouse
                 endpoints.MapControllerRoute(
                     name: "fullInfoWorker",
                     pattern: "{controller=Worker}/{action=FullInfo}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "notFoundCustomer",
+                    pattern: "{controller=Customer}/{action=CustomerNotFound}/{id?}");
             });
         }
     }

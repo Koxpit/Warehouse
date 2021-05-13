@@ -21,7 +21,7 @@
         <tr align="center">
             <td>Наименование</td>
             <td>Территория</td>
-            <td>Город</td>
+            <td>Адрес</td>
             <td></td>
         </tr>
         @foreach (var storage in Model)
@@ -29,7 +29,7 @@
     <tr align="center">
         <td>@Html.ActionLink(storage.Name, "SelectProductsInStorage", "Warehouse", new { storageName = storage.Name })</td>
         <td>@storage.Territory</td>
-        <td>@storage.City</td>
+        <td>@storage.Address</td>
         <td>@Html.ActionLink("Изменить", "Edit", "Storage", new { storageId = storage.ID })</td>
     </tr>
         }

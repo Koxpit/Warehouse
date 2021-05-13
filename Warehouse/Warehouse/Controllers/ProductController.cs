@@ -25,6 +25,7 @@ namespace Warehouse.Controllers
         public async Task<IActionResult> Add(Place place)
         {
             Storage foundStorage = FoundStorage(place.Storage);
+
             if (!_db.Storages.Contains(foundStorage))
                 return Content("Склад не существует");
             else
@@ -33,17 +34,29 @@ namespace Warehouse.Controllers
                 place.StorageId = foundStorage.ID;
             }
 
-            var foundCode = FoundCode(place.Product.Code);
+            string foundCode = FoundCode(place.Product.Code);
+
             if (foundCode == null && place.Product.BoxesInPallete == 0)
                 return Content("Введите количество коробов");
-            if (foundCode != null)
+            else
                 place.Product.BoxesInPallete = FindBoxesInPallete(place.Product.Code);
 
-            var foundTerm = FoundTerm(place.Product.Term);
-            if (foundTerm == DateTime.MinValue && place.Product.Party == null)
-                return Content("Введите партию");
-            if (foundTerm != DateTime.MinValue)
-                place.Product.Party = FindParty(place.Product.Term);
+            if (place.Product.Party == null)
+            {
+                string foundParty = FindParty(place.Product.Term);
+                if (foundParty == null)
+                    return Content($"Введите партию вручную. По сроку {place.Product.Term.ToShortDateString()} партия не найдена.");
+                else
+                    place.Product.Party = foundParty;
+            }
+            else
+            {
+                string existParty = _db.Products
+                    .Where(x => x.Code != place.Product.Code && x.Party == place.Product.Party)
+                    .Select(x => x.Party).FirstOrDefault();
+                if (existParty != null)
+                    return Content("Введенная партия принадлежит уже другому коду продукта.");
+            }
 
             _db.Places.Add(place);
             await _db.SaveChangesAsync();
@@ -65,22 +78,22 @@ namespace Warehouse.Controllers
                 .FirstOrDefault(code => code == sourceCode);
         }
 
-        private DateTime FoundTerm(DateTime sourceTerm)
+        private DateTime FoundTerm(string sourceParty)
         {
-            return _db.Products.Select(x => x.Term)
-                .FirstOrDefault(term => term == sourceTerm);
+            return _db.Products.Where(x => x.Party == sourceParty)
+                .Select(x => x.Term).FirstOrDefault();
         }
 
         private int FindBoxesInPallete(string code)
         {
-            return FirstData.codesNumBoxes
-                    .FirstOrDefault(x => x.Key == code).Value;
+            return _db.Products.Where(x => x.Code == code)
+               .Select(x => x.BoxesInPallete).FirstOrDefault();
         }
 
         private string FindParty(DateTime term)
         {
-            return FirstData.partyTerm
-                    .FirstOrDefault(x => x.Value == Convert.ToDateTime(term)).Key;
+            return _db.Products.Where(x => x.Term == term)
+                .Select(x => x.Party).FirstOrDefault();
         }
 
         [HttpGet]
@@ -134,7 +147,7 @@ namespace Warehouse.Controllers
                     x.Number == place.Number && 
                     x.ID != place.ID && 
                     x.Storage.Name == place.Storage.Name &&
-                    x.Storage.City == place.Storage.City &&
+                    x.Storage.Address == place.Storage.Address &&
                     x.Storage.Territory == place.Storage.Territory))
                 numPalletes += item.NumOfPalletes;
 

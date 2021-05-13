@@ -17,7 +17,7 @@
         </datalist>
     </p>
     <p>
-        @Html.LabelFor(m => m.Storage.Name, "Территория склада")
+        @Html.LabelFor(m => m.Storage.Territory, "Территория склада")
         @Html.TextBoxFor(m => m.Storage.Territory, new { list = "territoriesStorages", @required = "required" })
         <datalist id="territoriesStorages">
             @foreach (var territory in ViewBag.StorageTerritories)

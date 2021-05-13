@@ -24,7 +24,7 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Storage storage)
         {
-            if (_db.Storages.FirstOrDefault(x => x.Name == storage.Name && x.Territory == storage.Territory && x.City == storage.City) == null)
+            if (_db.Storages.FirstOrDefault(x => x.Name == storage.Name && x.Territory == storage.Territory) == null)
             {
                 _db.Storages.Add(storage);
                 await _db.SaveChangesAsync();
@@ -36,13 +36,13 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Storage storage)
         {
-            if (_db.Storages.FirstOrDefault(x => x.Name == storage.Name && x.Territory == storage.Territory && x.City == storage.City) != null)
+            if (_db.Storages.FirstOrDefault(x => x.Name == storage.Name && x.Territory == storage.Territory) != null)
                 return Content("Склад уже существует");
 
             Storage currentStorage = _db.Storages.FirstOrDefault(x => x.ID == storage.ID);
             currentStorage.Name = storage.Name;
             currentStorage.Territory = storage.Territory;
-            currentStorage.City = storage.City;
+            currentStorage.Address = storage.Address;
 
             _db.Storages.Update(currentStorage);
             await _db.SaveChangesAsync();
@@ -55,7 +55,6 @@ namespace Warehouse.Controllers
         {
             ViewBag.NamesStorages = _db.Storages.Select(s => s.Name).Distinct().ToList();
             ViewBag.StoragesTerritories = _db.Storages.Select(s => s.Territory).Distinct().ToList();
-            ViewBag.StoragesCities = _db.Storages.Select(s => s.City).Distinct().ToList();
 
             Storage currentStorage = _db.Storages.FirstOrDefault(x => x.ID == storageId);
 

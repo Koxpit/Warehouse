@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.Database;
 using Warehouse.Models;
+using Warehouse.Services;
 using Warehouse.ViewModels;
 
 namespace Warehouse.Controllers
@@ -101,6 +102,13 @@ namespace Warehouse.Controllers
         }
 
         [HttpGet]
+        public JsonResult GetStoragesJson()
+        {
+            List<Storage> storages = _db.Storages.ToList();
+            return Json(new { data = storages });
+        }
+
+        [HttpGet]
         public IActionResult Products()
         {
             var storagesNames = _db.Storages.Select(x => x.Name).Distinct().ToList();
@@ -127,6 +135,34 @@ namespace Warehouse.Controllers
             };
 
             return View(ordersViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Positions()
+        {
+            return View(_db.Positions.ToList());
+        }
+
+        [HttpGet]
+        public IActionResult Email()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Email(string emailAddress, string subject, string message)
+        {
+            EmailService emailService = new EmailService();
+
+            await emailService.SendEmailAsync(emailAddress, subject, message);
+
+            return Content("<h1>Сообщение успешно отправлено.</h1>");
+        }
+
+        [HttpGet]
+        public IActionResult MapsStorages()
+        {
+            return View(new { data = _db.Storages.ToList() });
         }
     }
 }

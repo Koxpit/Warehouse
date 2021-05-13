@@ -30,7 +30,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Warehouse" asp-action="Orders">Заказы</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Warehouse" asp-action="Email">Почта</a>
+                        </li>
                     </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Справка
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-area="" asp-controller="Warehouse" asp-action="Positions">Должности</a>
+                        <a class="dropdown-item" href="#">Информация о компании</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Warehouse" asp-action="MapsStorages">Наши склады</a>
+                    </div>
                 </div>
             </div>
         </nav>
