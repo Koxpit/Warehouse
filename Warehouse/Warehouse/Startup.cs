@@ -28,6 +28,8 @@ namespace Warehouse
             services.AddControllersWithViews();
             services.AddDbContext<WarehouseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

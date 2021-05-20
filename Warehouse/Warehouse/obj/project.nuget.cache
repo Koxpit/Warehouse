@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "wjd7XWLom+9PonP0z4J4feGvGxGj4/2ynayDzKozXj8zcaeFY1rg3lehGh+qU2uoePFXBsXK4tg8cByhMgA9DQ==",
+  "dgSpecHash": "KwCUHwezNewKUuRRDuG3ytHAWEXjL3nsprGxfAeqfFbYqM/8ltqVgN7a5gKsE0U6lvI0H8jWyXHxOL5sqPoNkg==",
   "success": true,
   "projectFilePath": "C:\\Users\\lenovo\\Desktop\\Диплом\\Алиев Александр\\Программа\\Warehouse\\Warehouse\\Warehouse.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\lenovo\\.nuget\\packages\\bouncycastle\\1.8.6.1\\bouncycastle.1.8.6.1.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\itextsharp\\5.5.13.2\\itextsharp.5.5.13.2.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\mailkit\\2.11.1\\mailkit.2.11.1.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.aspnet.mvc\\5.2.7\\microsoft.aspnet.mvc.5.2.7.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.aspnet.razor\\3.2.7\\microsoft.aspnet.razor.3.2.7.nupkg.sha512",
@@ -173,6 +175,26 @@
     "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Пакет \"BouncyCastle 1.8.6.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8\", а не целевой платформы проекта \".NETCoreApp,Version=v3.1\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "libraryId": "BouncyCastle",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Пакет \"iTextSharp 5.5.13.2\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8\", а не целевой платформы проекта \".NETCoreApp,Version=v3.1\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "libraryId": "iTextSharp",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

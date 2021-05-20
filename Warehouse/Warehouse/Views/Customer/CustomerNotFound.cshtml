@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Заказчик не найден";
+    ViewBag.Title = "CustomerNotFound";
 }
 
 <div>
-    <h1>Добавить нового заказчика?</h1>
+    <h1>Заказчика с введенным номером телефона не существует. Добавить нового?</h1>
     <div>
         <form asp-controller="Cutomer" asp-action="Add" method="get">
             <div class="form-group">
-                <input type="submit" class="btn btn-default" value="Добавить" />
+                <input type="submit" class="form-control-lg" value="Добавить" />
             </div>
         </form>
     </div>

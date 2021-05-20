@@ -6,10 +6,14 @@
 <h3>Форма добавления заказа</h3>
 @using (Html.BeginForm("Add", "Order", FormMethod.Post))
 {
-    <p>
-        @Html.LabelFor(m => m.Type, "Тип погрузки")
-        @Html.TextBoxFor(m => m.Type, new { @required = "required" })
-    </p>
+<p>
+    @Html.LabelFor(m => m.Type, "Тип погрузки")
+    @Html.TextBoxFor(m => m.Type, new { list = "typesOfOrders", @required = "required" })
+    <datalist id="typesOfOrders">
+        <option>Отгрузка</option>
+        <option>Выгрузка</option>
+    </datalist>
+</p>
     <p>
         @Html.LabelFor(m => m.ArrivalTime, "Плановое время")
         @Html.TextBoxFor(m => m.ArrivalTime, new { type = "date", @required = "required" })
@@ -20,7 +24,13 @@
     </p>
     <p>
         @Html.LabelFor(m => m.Customer.PhoneNumber, "Номер телефона заказчика")
-        @Html.TextBoxFor(m => m.Customer.PhoneNumber, new { @required = "required" })
+        @Html.TextBoxFor(m => m.Customer.PhoneNumber, new { list = "clientsPhones", @required = "required" })
+        <datalist id="clientsPhones">
+            @foreach (var clientPhone in ViewBag.ClientsPhones)
+            {
+                <option value="@clientPhone">@clientPhone</option>
+            }
+        </datalist>
     </p>
     <p><input type="submit" value="Добавить" /></p>
 }

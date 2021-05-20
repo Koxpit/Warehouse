@@ -1,16 +1,15 @@
-﻿@model Warehouse.ViewModels.OrdersViewModel
-@{
+﻿@{
     ViewData["Title"] = "Orders";
 }
 
 <style type="text/css">
     TABLE {
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        border: 1px solid black;
     }
 
     TR {
-        padding: 3px; /* Поля вокруг содержимого ячеек */
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        padding: 3px;
+        border: 1px solid black;
     }
 </style>
 <div class="text-center">
@@ -25,14 +24,14 @@
             <td>Грузы</td>
             <td></td>
         </tr>
-        @foreach (var order in Model.Orders)
+        @foreach (Order order in ViewBag.Orders)
         {
             <tr align="center">
                 <td>@Html.ActionLink(order.ID.ToString(), "Info", "Order", new { orderId = order.ID })</td>
                 <td>@order.Type</td>
                 <td>@order.ArrivalTime.ToShortDateString()</td>
                 <td>
-                    @foreach (var cargo in order.Cargos)
+                    @foreach (Cargo cargo in order.Cargos)
                     {
                         <p>Номер груза: @cargo.Number</p>
                         <p>Количество паллет: @cargo.NumOfPalletes</p>
@@ -43,9 +42,10 @@
             </tr>
         }
     </table>
+    <br />
     @using (Html.BeginForm("Add", "Order", FormMethod.Get))
     {
-        <button>Добавить</button>
+        <button class="form-control">Добавить</button>
     }
 </div>
 

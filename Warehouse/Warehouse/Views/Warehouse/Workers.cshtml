@@ -5,12 +5,12 @@
 
     <style type="text/css">
         TABLE {
-            border: 1px solid black; /* Рамка вокруг таблицы */
+            border: 1px solid black;
         }
 
         TR {
-            padding: 3px; /* Поля вокруг содержимого ячеек */
-            border: 1px solid black; /* Рамка вокруг таблицы */
+            padding: 3px;
+            border: 1px solid black;
         }
     </style>
 <div class="text-center">
@@ -36,8 +36,9 @@
     </tr>
         }
     </table>
+    <br />
     @using (Html.BeginForm("Add", "Worker", FormMethod.Get))
     {
-        <button>Добавить</button>
+        <button class="form-control">Добавить</button>
     }
 </div>

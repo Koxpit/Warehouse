@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Warehouse.Database;
 using Warehouse.Models;
@@ -26,53 +31,50 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var products = _db.Products.ToList();
-            var storages = _db.Storages.ToList();
-            var indexViewModel = new IndexViewModel
-            {
-                Products = products,
-                Storages = storages
-            };
+            ViewBag.Products = _db.Products.ToList();
+            ViewBag.Territories = _db.Storages.Select(x => x.Territory).Distinct();
+            ViewBag.StoragesNames = _db.Storages.Select(x => x.Name).Distinct();
 
-            return View(indexViewModel);
+            return View();
         }
 
         [HttpGet]
         public IActionResult GetSelectedProducts(string code, string party)
         {
-            List<Place> selectedProducts;
+            ViewBag.SelectedProducts = GetPlacesByCodeAndPartyProduct(code, party);
 
-            if (String.IsNullOrWhiteSpace(party))
+            return View("Products");
+        }
+
+        private List<Place> GetPlacesByCodeAndPartyProduct(string code, string party)
+        {
+            if (String.IsNullOrWhiteSpace(party) && String.IsNullOrWhiteSpace(code))
             {
-                selectedProducts = _db.Places.Include(p => p.Product).Include(s => s.Storage)
+                return _db.Places.Include(p => p.Product).Include(s => s.Storage).ToList();
+            }
+            else if (String.IsNullOrWhiteSpace(party))
+            {
+                return _db.Places.Include(p => p.Product).Include(s => s.Storage)
                     .Where(p => p.Product.Code == code).ToList();
             }
-            else
-            {
-                selectedProducts = _db.Places.Include(p => p.Product).Include(s => s.Storage)
-                    .Where(p => p.Product.Code == code && p.Product.Party == party).ToList();
-            }
 
-            var productsViewModel = new ProductsViewModel
-            {
-                Products = selectedProducts
-            };
+            return _db.Places.Include(p => p.Product).Include(s => s.Storage)
+                .Where(p => p.Product.Code == code && p.Product.Party == party).ToList();
+        }
 
-            return View("Products", productsViewModel);
+        public void GetPdfFile(string code, string party)
+        {
+            List<Place> places = GetPlacesByCodeAndPartyProduct(code, party);
+            PdfService.ExportToPDF(ref places);
         }
 
         [HttpGet]
         public IActionResult SelectProductsInStorage(string storageName)
         {
-            List<Place> selectedProducts =_db.Places.Include(p => p.Product).Include(s => s.Storage)
+            ViewBag.SelectedProducts = _db.Places.Include(p => p.Product).Include(s => s.Storage)
                 .Where(s => s.Storage.Name == storageName).ToList();
 
-            var productsViewModel = new ProductsViewModel
-            {
-                Products = selectedProducts
-            };
-
-            return View("Products", productsViewModel);
+            return View("Products");
         }
 
         [HttpGet]
@@ -102,39 +104,46 @@ namespace Warehouse.Controllers
         }
 
         [HttpGet]
+        public IActionResult Customers()
+        {
+            return View(_db.Customers.ToList());
+        }
+
+        [HttpGet]
         public JsonResult GetStoragesJson()
         {
             List<Storage> storages = _db.Storages.ToList();
+            ViewBag.Mass = storages.Select(x => x.StorageImageBase64).ToList();
             return Json(new { data = storages });
+        }
+
+        [HttpGet]
+        public JsonResult GetStorageById(int id)
+        {
+            Storage storage = _db.Storages.Where(x => x.ID == id).SingleOrDefault();
+            return Json(new { data = storage });
         }
 
         [HttpGet]
         public IActionResult Products()
         {
-            var storagesNames = _db.Storages.Select(x => x.Name).Distinct().ToList();
+            List<string> storagesNames = _db.Storages.Select(x => x.Name).Distinct().ToList();
             List<Place> products = new List<Place>();
 
-            foreach (var name in storagesNames)
+            foreach (string name in storagesNames)
                 products.AddRange(_db.Places.Include(p => p.Product).Include(s => s.Storage).Where(s => s.Storage.Name == name).ToList());
 
-            var productsViewModel = new ProductsViewModel
-            {
-                Products = products
-            };
+            ViewBag.SelectedProducts = products;
 
-            return View(productsViewModel);
+            return View();
         }
 
         [HttpGet]
         public IActionResult Orders()
         {
-            var orders = _db.Orders.Where(d => d.ArrivalTime > DateTime.Now).Include(c => c.Cargos).ThenInclude(p => p.Product).ToList();
-            var ordersViewModel = new OrdersViewModel
-            {
-                Orders = orders
-            };
+            ViewBag.Orders = _db.Orders.Where(d => d.ArrivalTime > DateTime.Now).Include(c => c.Cargos).ThenInclude(p => p.Product).ToList();
 
-            return View(ordersViewModel);
+            return View();
         }
 
         [HttpGet]
@@ -156,13 +165,14 @@ namespace Warehouse.Controllers
 
             await emailService.SendEmailAsync(emailAddress, subject, message);
 
-            return Content("<h1>Сообщение успешно отправлено.</h1>");
+            return Content("Сообщение успешно отправлено.");
         }
 
         [HttpGet]
         public IActionResult MapsStorages()
         {
-            return View(new { data = _db.Storages.ToList() });
+            ViewBag.ListOfStorages = _db.Storages.ToList();
+            return View();
         }
     }
 }

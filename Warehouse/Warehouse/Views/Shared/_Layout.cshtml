@@ -37,12 +37,21 @@
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Отчеты
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-area="" asp-controller="Warehouse" asp-action="№">Отчет по срокам</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Справка
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" asp-area="" asp-controller="Warehouse" asp-action="Positions">Должности</a>
                         <a class="dropdown-item" href="#">Информация о компании</a>
                         <a class="dropdown-item" asp-area="" asp-controller="Warehouse" asp-action="MapsStorages">Наши склады</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Warehouse" asp-action="Customers">Наши заказчики</a>
                     </div>
                 </div>
             </div>

@@ -29,6 +29,7 @@ namespace Warehouse.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Position>().HasIndex(x => new { x.Name }).IsUnique();
+            modelBuilder.Entity<Storage>().Property(p => p.StorageImage).HasColumnType("image");
         }
     }
 }

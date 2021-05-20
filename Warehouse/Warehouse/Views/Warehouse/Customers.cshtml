@@ -5,12 +5,12 @@
 
 <style type="text/css">
     TABLE {
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        border: 1px solid black;
     }
 
     TR {
-        padding: 3px; /* Поля вокруг содержимого ячеек */
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        padding: 3px;
+        border: 1px solid black;
     }
 </style>
 <div class="text-center">
@@ -23,21 +23,24 @@
             <td>Номер телефона</td>
             <td>Компания</td>
             <td>Город</td>
+            <td></td>
+            <td></td>
         </tr>
         @foreach (var customer in Model)
         {
-    <tr align="center">
-        <td>@customer.FIO</td>
-        <td>@customer.PhoneNumber</td>
-        <td>@customer.CompanyName</td>
-        <td>@customer.City</td>
-        <td>@Html.ActionLink("Изменить", "Edit", "Customer", new { customerId = customer.ID })</td>
-        <td>@Html.ActionLink("Удалить", "Delete", "Customer", new { customerId = customer.ID })</td>
-    </tr>
+            <tr align="center">
+                <td>@customer.FIO</td>
+                <td>@customer.PhoneNumber</td>
+                <td>@customer.CompanyName</td>
+                <td>@customer.City</td>
+                <td>@Html.ActionLink("Изменить", "Edit", "Customer", new { customerId = customer.ID })</td>
+                <td>@Html.ActionLink("Удалить", "Delete", "Customer", new { customerId = customer.ID })</td>
+            </tr>
         }
     </table>
+    <br />
     @using (Html.BeginForm("Add", "Customer", FormMethod.Get))
     {
-        <button>Добавить</button>
+        <button class="form-control">Добавить</button>
     }
 </div>

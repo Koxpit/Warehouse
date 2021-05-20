@@ -13,5 +13,7 @@ namespace Warehouse.Models
         public string Address { get; set; }
         public double GeoLong { get; set; }
         public double GeoLat { get; set; }
+        public byte[] StorageImage { get; set; }
+        public string StorageImageBase64 { get; set; }
     }
 }

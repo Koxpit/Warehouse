@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.Models;
@@ -302,6 +303,11 @@ namespace Warehouse.Database
         }
         private static void InitStorage(WarehouseContext context)
         {
+            byte[] fB = File.ReadAllBytes(Environment.CurrentDirectory + "/wwwroot/images/maps5MihnevoStorage.jpg");
+            string encodedFile = Convert.ToBase64String(fB);
+            byte[] fB2 = File.ReadAllBytes(Environment.CurrentDirectory + "/wwwroot/images/maps5StupinoStorageZyab.jpg");
+            string encodedFile2 = Convert.ToBase64String(fB2);
+
             if (!context.Storages.Any())
             {
                 context.Storages.AddRange(
@@ -311,7 +317,9 @@ namespace Warehouse.Database
                         Territory = "ЗЯБ",
                         Address = "РФ, МО, г.Ступино, ул.Транспортная, вл.22/2",
                         GeoLat = 54.899057,
-                        GeoLong = 38.050520
+                        GeoLong = 38.050520,
+                        StorageImage = fB,
+                        StorageImageBase64 = encodedFile
                     },
                     new Storage
                     {
@@ -319,7 +327,9 @@ namespace Warehouse.Database
                         Territory = "ЗЯБ",
                         Address = "РФ, МО, г.Ступино, ул.Транспортная, вл.22/2",
                         GeoLat = 54.898866,
-                        GeoLong = 38.047805
+                        GeoLong = 38.047805,
+                        StorageImage = fB2,
+                        StorageImageBase64 = encodedFile2
                     }
                 );
 

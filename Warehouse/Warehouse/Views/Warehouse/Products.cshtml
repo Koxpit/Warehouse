@@ -1,16 +1,15 @@
-﻿@model Warehouse.ViewModels.ProductsViewModel
-@{
+﻿@{
     ViewData["Title"] = "Products";
 }
 
 <style type="text/css">
     TABLE {
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        border: 1px solid black;
     }
 
     TR {
-        padding: 3px; /* Поля вокруг содержимого ячеек */
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        padding: 3px;
+        border: 1px solid black;
     }
 </style>
 <div class="text-center">
@@ -34,7 +33,7 @@
             <td></td>
             <td></td>
         </tr>
-        @foreach (var item in Model.Products)
+        @foreach (Place item in ViewBag.SelectedProducts)
         {
     <tr align="center">
         <td>@item.Storage.Name</td>
@@ -54,9 +53,10 @@
     </tr>
         }
     </table>
+    <br />
     @using (Html.BeginForm("Add", "Product", FormMethod.Get))
     {
-        <button>Добавить</button>
+        <button class="form-control">Добавить</button>
     }
 </div>
 

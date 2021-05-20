@@ -5,12 +5,12 @@
 
 <style type="text/css">
     TABLE {
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        border: 1px solid black;
     }
 
     TR {
-        padding: 3px; /* Поля вокруг содержимого ячеек */
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        padding: 3px;
+        border: 1px solid black;
     }
 </style>
 <div class="text-center">
@@ -26,16 +26,17 @@
         </tr>
         @foreach (var storage in Model)
         {
-    <tr align="center">
-        <td>@Html.ActionLink(storage.Name, "SelectProductsInStorage", "Warehouse", new { storageName = storage.Name })</td>
-        <td>@storage.Territory</td>
-        <td>@storage.Address</td>
-        <td>@Html.ActionLink("Изменить", "Edit", "Storage", new { storageId = storage.ID })</td>
-    </tr>
+            <tr align="center">
+                <td>@Html.ActionLink(storage.Name, "SelectProductsInStorage", "Warehouse", new { storageName = storage.Name })</td>
+                <td>@storage.Territory</td>
+                <td>@storage.Address</td>
+                <td>@Html.ActionLink("Изменить", "Edit", "Storage", new { storageId = storage.ID })</td>
+            </tr>
         }
     </table>
+    <br />
     @using (Html.BeginForm("Add", "Storage", FormMethod.Get))
     {
-        <button>Добавить</button>
+        <button class="form-control">Добавить</button>
     }
 </div>

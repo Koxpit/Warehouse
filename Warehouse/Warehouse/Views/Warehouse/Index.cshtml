@@ -1,5 +1,4 @@
-﻿@model Warehouse.ViewModels.IndexViewModel
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
 
@@ -15,8 +14,8 @@
         }
 
         div.search, div.edit {
-            padding: 3px; /* Поля вокруг содержимого ячеек */
-            border: 1px solid black; /* Рамка вокруг таблицы */
+            padding: 3px;
+            border: 1px solid black;
             margin-bottom: 10px;
         }
     </style>
@@ -28,7 +27,7 @@
                     <p>Код товара</p>
                     <select name="code">
                         <option value=""></option>
-                        @foreach (var item in Model.Products)
+                        @foreach (Product item in ViewBag.Products)
                         {
                             <option value="@item.Code">@item.Code</option>
                         }
@@ -38,14 +37,14 @@
                     <p>Партия</p>
                     <select name="party">
                         <option value=""></option>
-                        @foreach (var item in Model.Products)
+                        @foreach (Product item in ViewBag.Products)
                         {
                             <option value="@item.Party">@item.Party</option>
                         }
                     </select>
                 </div>
                 <button type="submit" formaction="GetSelectedProducts" formmethod="get">Найти</button>
-                <button type="submit">Просмотр</button>
+                <button type="submit" formaction="GetPdfFile">Экспорт в PDF</button>
                 <button type="submit">Инвентаризация</button>
             </form>
         </div>
@@ -55,18 +54,18 @@
                 <div class="storageName">
                     <p>Склад</p>
                     <select name="storageName">
-                        @foreach (var item in Model.Storages)
+                        @foreach (string storageName in ViewBag.StoragesNames)
                         {
-                            <option value="@item.Name">@item.Name</option>
+                            <option value="@storageName">@storageName</option>
                         }
                     </select>
                 </div>
                 <div class="storageTerritory">
                     <p>Территория</p>
                     <select name="territoryName">
-                        @foreach (var item in Model.Storages)
+                        @foreach (string storageTerritory in ViewBag.Territories)
                         {
-                            <option value="@item.Territory">@item.Territory</option>
+                            <option value="@storageTerritory">@storageTerritory</option>
                         }
                     </select>
                 </div>

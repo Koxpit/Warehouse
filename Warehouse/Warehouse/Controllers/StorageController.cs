@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Warehouse.Database;
 using Warehouse.Models;
@@ -26,6 +28,32 @@ namespace Warehouse.Controllers
         {
             if (_db.Storages.FirstOrDefault(x => x.Name == storage.Name && x.Territory == storage.Territory) == null)
             {
+                string url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyA7wuEtL3ZAzIeRhSPIJ21K3Y6vEIP9hfk");
+                //Выполняем запрос к универсальному коду ресурса (URI).
+                System.Net.HttpWebRequest request =
+                    (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
+
+                //Получаем ответ от интернет-ресурса.
+                System.Net.WebResponse response =
+                    request.GetResponse();
+
+                //Экземпляр класса System.IO.Stream 
+                //для чтения данных из интернет-ресурса.
+                System.IO.Stream dataStream =
+                    response.GetResponseStream();
+
+                //Инициализируем новый экземпляр класса 
+                //System.IO.StreamReader для указанного потока.
+                System.IO.StreamReader sreader =
+                    new System.IO.StreamReader(dataStream);
+
+                //Считывает поток от текущего положения до конца.            
+                string responsereader = sreader.ReadToEnd();
+                return Content(responsereader);
+
+                //Закрываем поток ответа.
+                response.Close();
+
                 _db.Storages.Add(storage);
                 await _db.SaveChangesAsync();
             }

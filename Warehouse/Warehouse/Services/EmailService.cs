@@ -23,8 +23,8 @@ namespace Warehouse.Services
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.yandex.ru", 25, false);
-                //await client.AuthenticateAsync("login@yandex.ru", "password");
+                await client.ConnectAsync("smtp.yandex.ru", 465, true);
+                await client.AuthenticateAsync("yourEmail", "yourPassword");
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);

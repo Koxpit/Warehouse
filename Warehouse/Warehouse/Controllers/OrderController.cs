@@ -33,22 +33,25 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+            ViewBag.ClientsPhones = _db.Customers.Select(x => x.PhoneNumber);
+            
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(Order order)
         {
-            Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.FIO == order.Customer.FIO && x.PhoneNumber == order.Customer.PhoneNumber);
+            Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
 
             if (currentCustomer == null)
                 return RedirectToAction("CustomerNotFound", "Customer");
             else
                 order.Customer = currentCustomer;
 
+            _db.Orders.Add(order);
+            await _db.SaveChangesAsync();
 
-
-            return View();
+            return RedirectToAction("Orders", "Warehouse");
         }
 
         [HttpGet]

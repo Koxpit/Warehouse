@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Warehouse.Models.Place>
+@{
+    ViewData["Title"] = "Отчет по срокам годности товаров";
+}
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black;
+    }
+
+    TR {
+        padding: 3px;
+        border: 1px solid black;
+    }
+</style>
+<div class="text-center">
+    <h1 class="col-md-12">Продукция</h1>
+</div>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        
+    </table>
+    <br />
+    @using (Html.BeginForm("Add", "Customer", FormMethod.Get))
+    {
+        <button class="form-control">Добавить</button>
+    }
+</div>

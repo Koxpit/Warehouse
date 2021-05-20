@@ -2,6 +2,27 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
+      "BouncyCastle/1.8.6.1": {
+        "type": "package",
+        "compile": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        },
+        "runtime": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        }
+      },
+      "iTextSharp/5.5.13.2": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle": "1.8.6.1"
+        },
+        "compile": {
+          "lib/itextsharp.dll": {}
+        },
+        "runtime": {
+          "lib/itextsharp.dll": {}
+        }
+      },
       "MailKit/2.11.1": {
         "type": "package",
         "dependencies": {
@@ -2722,6 +2743,35 @@
     }
   },
   "libraries": {
+    "BouncyCastle/1.8.6.1": {
+      "sha512": "rkqpuKmJkdcfTMBkIj1b5nMdBAWKwAyh+I/BQYeqqSD2jkIlhwc9qBNKmSbnpmmm5c29qHZGLpvBSTNWvDLtQA==",
+      "type": "package",
+      "path": "bouncycastle/1.8.6.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "bouncycastle.1.8.6.1.nupkg.sha512",
+        "bouncycastle.nuspec",
+        "lib/BouncyCastle.Crypto.dll"
+      ]
+    },
+    "iTextSharp/5.5.13.2": {
+      "sha512": "8m9oT1nh9F4Z1tzWUey/8lEzZtMGFCDXQY5+8/SSmPgUWAAAWniRo8pimKUZyteNqJr5vtFBxjAhRwLxG7Q0zQ==",
+      "type": "package",
+      "path": "itextsharp/5.5.13.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "gnu-agpl-v3.0.md",
+        "itextsharp.5.5.13.2.nupkg.sha512",
+        "itextsharp.nuspec",
+        "lib/iTextSharp.xml",
+        "lib/itextsharp.dll",
+        "notice.txt"
+      ]
+    },
     "MailKit/2.11.1": {
       "sha512": "Z/MjVOicmCCLMgOQ3pr7MKQ9fsIrMt5qA2qqTO7Uux7Q6y4pYQFV4HBeJcc/oTjNxngiLzFlUoF9oSuQdFD/ig==",
       "type": "package",
@@ -8881,7 +8931,8 @@
       "Microsoft.AspNet.Mvc >= 5.2.7",
       "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.12",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.4",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.5"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.5",
+      "iTextSharp >= 5.5.13.2"
     ]
   },
   "packageFolders": {
@@ -8947,6 +8998,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[3.1.5, )"
+          },
+          "iTextSharp": {
+            "target": "Package",
+            "version": "[5.5.13.2, )"
           }
         },
         "imports": [
@@ -8978,6 +9033,26 @@
     }
   },
   "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Пакет \"BouncyCastle 1.8.6.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8\", а не целевой платформы проекта \".NETCoreApp,Version=v3.1\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "libraryId": "BouncyCastle",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Пакет \"iTextSharp 5.5.13.2\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8\", а не целевой платформы проекта \".NETCoreApp,Version=v3.1\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "libraryId": "iTextSharp",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

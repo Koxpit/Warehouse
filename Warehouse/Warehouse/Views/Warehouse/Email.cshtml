@@ -4,10 +4,10 @@
 
 <form method="post" action="~/Warehouse/Email">
     <label>Адрес:</label><br />
-    <input type="email" name="emailAddress" /><br />
+    <input type="email" name="emailAddress" required class="form-control"/><br />
     <label>Тема:</label><br />
-    <input type="text" name="subject" /><br />
+    <input type="text" name="subject" required class="form-control"/><br />
     <label>Сообщение:</label><br />
-    <textarea type="text" name="message"></textarea><br />
-    <input type="submit" value="Отправить" />
+    <textarea type="text" name="message" required class="form-control"></textarea><br />
+    <input type="submit" value="Отправить"/>
 </form>
