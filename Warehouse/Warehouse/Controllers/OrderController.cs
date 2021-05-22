@@ -25,7 +25,7 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Info(string orderId)
         {
-            var order = _db.Orders.Include(c => c.Customer).FirstOrDefault(i => i.ID == Convert.ToInt32(orderId));
+            var order = _db.Orders.Include(c => c.Customer).Include(x => x.Vehicle).Include(x => x.Vehicle.Driver).FirstOrDefault(i => i.ID == Convert.ToInt32(orderId));
 
             return View(order);
         }
@@ -34,7 +34,8 @@ namespace Warehouse.Controllers
         public IActionResult Add()
         {
             ViewBag.ClientsPhones = _db.Customers.Select(x => x.PhoneNumber);
-            
+            ViewBag.NumbersVehicles = _db.Vehicles.Select(x => x.Number);
+
             return View();
         }
 
@@ -42,11 +43,17 @@ namespace Warehouse.Controllers
         public async Task<IActionResult> Add(Order order)
         {
             Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
+            Vehicle currentVehicle = _db.Vehicles.FirstOrDefault(x => x.Number == order.Vehicle.Number);
 
             if (currentCustomer == null)
                 return RedirectToAction("CustomerNotFound", "Customer");
             else
                 order.Customer = currentCustomer;
+
+            if (currentVehicle == null)
+                return Content("Авто не найден.");
+            else
+                order.Vehicle = currentVehicle;
 
             _db.Orders.Add(order);
             await _db.SaveChangesAsync();
@@ -55,33 +62,59 @@ namespace Warehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddCargo(int orderId)
+        public IActionResult Edit(int orderId)
         {
-            ViewBag.Products = _db.Products.ToList();
+            ViewBag.ClientsPhones = _db.Customers.Select(x => x.PhoneNumber);
+            ViewBag.NumbersVehicles = _db.Vehicles.Select(x => x.Number);
+            Order order = _db.Orders.Where(x => x.ID == orderId).Include(x => x.Customer).Include(x => x.Vehicle).Include(x => x.Vehicle.Driver).FirstOrDefault();
 
-            CargoOrderViewModel cargoOrderViewModel = new CargoOrderViewModel
-            {
-                OrderId = orderId,
-                Cargo = new Cargo()
-                {
-                    Product = new Product()
-                }
-            };
-
-            return View(cargoOrderViewModel);
+            return View(order);
         }
 
         [HttpPost]
-        public IActionResult AddCargo(CargoOrderViewModel cargoOrderViewModel)
+        public async Task<IActionResult> Edit(Order order)
         {
-            Order currentOrder = _db.Orders.Include(x => x.Cargos).Where(x => x.ID == cargoOrderViewModel.OrderId).FirstOrDefault();
-            var currentCargos = currentOrder.Cargos;
-            if (currentCargos.FirstOrDefault(x => x.Number == cargoOrderViewModel.Cargo.Number) != null)
-            {
-                return Content("Груз с выбранным номером принадлежит другому заказу. Измените номер груза.");
-            }
+            if (_db.Orders.FirstOrDefault(x => x.Number == order.Number && x.ID != order.ID) != null)
+                return Content("Заказ с таким номером уже существует.");
 
-            return View();
+            Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
+            if (currentCustomer == null)
+                return RedirectToAction("CustomerNotFound", "Customer");
+            else
+                order.Customer = currentCustomer;
+
+            Vehicle currentVehicle = _db.Vehicles.FirstOrDefault(x => x.Number == order.Vehicle.Number);
+            if (currentVehicle == null)
+                return Content("Авто не найден.");
+            else
+                order.Vehicle = currentVehicle;
+
+            _db.Orders.Update(order);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Orders", "Warehouse");
+        }
+
+        [HttpGet]
+        [ActionName("Delete")]
+        public async Task<IActionResult> ConfirmDelete(int id)
+        {
+            Order order = await _db.Orders.FirstOrDefaultAsync(p => p.ID == id);
+            if (order != null)
+                return View(order);
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Order order = new Order { ID = id };
+
+            _db.Entry(order).State = EntityState.Deleted;
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Orders", "Warehouse");
         }
     }
 }

@@ -41,11 +41,11 @@ namespace Warehouse.Database
             InitWorkers(context);
             InitVehicle(context);
             InitStorage(context);
+            InitPlaces(context);
             InitProducts(context);
-            InitCargos(context);
             InitCustomers(context);
             InitOrders(context);
-            InitPlaces(context);
+            InitCargos(context);
         }
 
         private static void InitPositions(WarehouseContext context)
@@ -336,6 +336,30 @@ namespace Warehouse.Database
                 context.SaveChanges();
             }
         }
+        private static void InitPlaces(WarehouseContext context)
+        {
+            if (!context.Places.Any())
+            {
+                context.Places.AddRange(
+                    new Place
+                    {
+                        Sector = "1",
+                        Number = "1",
+                        MaxPalletes = 22,
+                        StorageId = 1
+                    },
+                    new Place
+                    {
+                        Sector = "1",
+                        Number = "2",
+                        MaxPalletes = 22,
+                        StorageId = 1
+                    }
+                );
+
+                context.SaveChanges();
+            }
+        }
         private static void InitProducts(WarehouseContext context)
         {
             if (!context.Products.Any())
@@ -349,7 +373,9 @@ namespace Warehouse.Database
                         Term = partyTerm.FirstOrDefault(x => x.Key == "S100000001").Value,
                         Comment = "",
                         BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "6743").Value,
-                        Cost = 8000
+                        NumOfPalletes = 10,
+                        Cost = 8000,
+                        PlaceId = 1
                     },
                     new Product
                     {
@@ -359,7 +385,9 @@ namespace Warehouse.Database
                         Term = partyTerm.FirstOrDefault(x => x.Key == "S200000001").Value,
                         Comment = "",
                         BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "7826").Value,
-                        Cost = 12000
+                        NumOfPalletes = 6,
+                        Cost = 12000,
+                        PlaceId = 2
                     },
                     new Product
                     {
@@ -369,35 +397,9 @@ namespace Warehouse.Database
                         Term = partyTerm.FirstOrDefault(x => x.Key == "S300000001").Value,
                         Comment = "",
                         BoxesInPallete = codesNumBoxes.FirstOrDefault(x => x.Key == "15976").Value,
-                        Cost = 32000
-                    }
-                );
-
-                context.SaveChanges();
-            }
-        }
-        private static void InitCargos(WarehouseContext context)
-        {
-            if (!context.Cargos.Any())
-            {
-                context.Cargos.AddRange(
-                    new Cargo
-                    {
-                        Number = "00000001",
-                        NumOfPalletes = 11,
-                        ProductId = 1
-                    },
-                    new Cargo
-                    {
-                        Number = "00000001",
-                        NumOfPalletes = 11,
-                        ProductId = 2
-                    },
-                    new Cargo
-                    {
-                        Number = "00000002",
-                        NumOfPalletes = 22,
-                        ProductId = 3
+                        NumOfPalletes = 2,
+                        Cost = 32000,
+                        PlaceId = 1
                     }
                 );
 
@@ -435,53 +437,50 @@ namespace Warehouse.Database
                 context.Orders.AddRange(
                     new Order
                     {
+                        Number = "00001",
                         Type = "Погрузка",
                         ArrivalTime = Convert.ToDateTime("15.04.2021"),
                         CustomerId = 1,
-                        Customer = context.Customers.Find(1),
-                        Cargos = new List<Cargo> { context.Cargos.Find(1), context.Cargos.Find(2) }
+                        VehicleId = 1
                     },
                     new Order
                     {
+                        Number = "00002",
                         Type = "Выгрузка",
                         ArrivalTime = Convert.ToDateTime("17.03.2021"),
                         CustomerId = 2,
-                        Customer = context.Customers.Find(2),
-                        Cargos = new List<Cargo> { context.Cargos.Find(3) }
+                        VehicleId = 2
                     }
                 );
 
                 context.SaveChanges();
             }
         }
-        private static void InitPlaces(WarehouseContext context)
+        private static void InitCargos(WarehouseContext context)
         {
-            if (!context.Places.Any())
+            if (!context.Cargos.Any())
             {
-                context.Places.AddRange(
-                    new Place
+                context.Cargos.AddRange(
+                    new Cargo
                     {
-                        Sector = "1",
-                        Number = "1",
-                        StorageId = 1,
+                        Number = "00000001",
+                        NumOfPalletes = 11,
                         ProductId = 1,
-                        NumOfPalletes = 11
+                        OrderId = 1
                     },
-                    new Place
+                    new Cargo
                     {
-                        Sector = "1",
-                        Number = "2",
-                        StorageId = 1,
+                        Number = "00000001",
+                        NumOfPalletes = 11,
                         ProductId = 2,
-                        NumOfPalletes = 11
+                        OrderId = 1
                     },
-                    new Place
+                    new Cargo
                     {
-                        Sector = "1",
-                        Number = "1",
-                        StorageId = 1,
+                        Number = "00000002",
+                        NumOfPalletes = 22,
                         ProductId = 3,
-                        NumOfPalletes = 11
+                        OrderId = 2
                     }
                 );
 

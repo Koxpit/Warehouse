@@ -1,0 +1,34 @@
+﻿@model Warehouse.Models.Cargo
+@{
+    ViewData["Title"] = "Cargo Info";
+}
+
+
+<style type="text/css">
+    TABLE {
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+
+    TR {
+        padding: 3px; /* Поля вокруг содержимого ячеек */
+        border: 1px solid black; /* Рамка вокруг таблицы */
+    }
+</style>
+<div class="text-left">
+    <table style="width:100%;" class="col-md-12">
+        <tr align="center">
+            <td>Номер груза</td>
+            <td>Кол-во паллет</td>
+            <td>Номер заказа</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td>@Model.Number</td>
+            <td>@Model.NumOfPalletes</td>
+            <td>@Model.Order.Number</td>
+            <td>@Html.ActionLink("Изменить", "Edit", "Cargo", new { cargoId = Model.ID, orderId = Model.OrderId })</td>
+            <td>@Html.ActionLink("Удалить", "Delete", "Cargo", new { id = Model.ID })</td>
+        </tr>
+    </table>
+</div>

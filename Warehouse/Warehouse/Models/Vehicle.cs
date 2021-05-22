@@ -14,5 +14,7 @@ namespace Warehouse.Models
 
         public int? DriverId { get; set; }
         public Driver Driver { get; set; }
+
+        public List<Order> Orders { get; set; }
     }
 }

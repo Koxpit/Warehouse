@@ -70,10 +70,11 @@
             var contentString =
                 '<div id="content">' +
                 '<div id="siteNotice">' +
-            '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">' + data.data.name + '</h1>' +
-            '<div id="bodyContent">' +
-            '<p>Территория <b>' + data.data.territory + '</b> - ' + data.data.address + '</p>' +
+                '</div>' +
+                '<h1 id="firstHeading" class="firstHeading">' + data.data.name + '</h1>' +
+                "<img src='data:image/jpeg;base64," + data.data.storageImageBase64 + "' width=300px height=150px />" +
+                '<div id="bodyContent">' +
+                '<p>Территория <b>' + data.data.territory + '</b> - ' + data.data.address + '</p>' +
                 '</div>' +
                 '</div>';
             var infowindow = new google.maps.InfoWindow({

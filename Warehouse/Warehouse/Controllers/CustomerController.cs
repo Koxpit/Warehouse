@@ -65,9 +65,9 @@ namespace Warehouse.Controllers
 
         [HttpGet]
         [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int customerId)
+        public async Task<IActionResult> ConfirmDelete(int id)
         {
-            Customer customer = await _db.Customers.FirstOrDefaultAsync(p => p.ID == customerId);
+            Customer customer = await _db.Customers.FirstOrDefaultAsync(p => p.ID == id);
             if (customer != null)
                 return View(customer);
 
@@ -75,9 +75,9 @@ namespace Warehouse.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int customerId)
+        public async Task<IActionResult> Delete(int id)
         {
-            Customer customer = new Customer { ID = customerId };
+            Customer customer = new Customer { ID = id };
 
             _db.Entry(customer).State = EntityState.Deleted;
             await _db.SaveChangesAsync();

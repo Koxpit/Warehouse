@@ -34,7 +34,7 @@
                 <td>@customer.CompanyName</td>
                 <td>@customer.City</td>
                 <td>@Html.ActionLink("Изменить", "Edit", "Customer", new { customerId = customer.ID })</td>
-                <td>@Html.ActionLink("Удалить", "Delete", "Customer", new { customerId = customer.ID })</td>
+                <td>@Html.ActionLink("Удалить", "Delete", "Customer", new { id = customer.ID })</td>
             </tr>
         }
     </table>

@@ -10,10 +10,9 @@ namespace Warehouse.Models
         public int ID { get; set; }
         public string Sector { get; set; }
         public string Number { get; set; }
-        public int NumOfPalletes { get; set; }
+        public int MaxPalletes { get; set; }
 
-        public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public List<Product> Products { get; set; }
 
         public int StorageId { get; set; }
         public Storage Storage { get; set; }

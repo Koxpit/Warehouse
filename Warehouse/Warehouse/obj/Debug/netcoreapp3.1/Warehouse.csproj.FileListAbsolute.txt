@@ -448,8 +448,13 @@ C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Програ�
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\bin\Debug\netcoreapp3.1\System.Web.WebPages.Razor.dll
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\bin\Debug\netcoreapp3.1\System.Web.WebPages.dll
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\bin\Debug\netcoreapp3.1\Microsoft.Web.Infrastructure.dll
-C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Order\AddCargo.cshtml.g.cs
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\bin\Debug\netcoreapp3.1\itextsharp.dll
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Report\Expiration.cshtml.g.cs
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Warehouse.csproj.CoreCompileInputs.cache
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Warehouse.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Warehouse.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Cargo\Add.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Order\Delete.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Cargo\Info.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Cargo\Delete.cshtml.g.cs
+C:\Users\lenovo\Desktop\Диплом\Алиев Александр\Программа\Warehouse\Warehouse\obj\Debug\netcoreapp3.1\Razor\Views\Cargo\Edit.cshtml.g.cs

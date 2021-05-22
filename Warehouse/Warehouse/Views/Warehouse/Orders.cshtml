@@ -33,12 +33,12 @@
                 <td>
                     @foreach (Cargo cargo in order.Cargos)
                     {
-                        <p>Номер груза: @cargo.Number</p>
+                        <p>Номер груза: @Html.ActionLink(cargo.Number, "Info", "Cargo", new { cargoId = cargo.ID })</p>
                         <p>Количество паллет: @cargo.NumOfPalletes</p>
                         <p>Наименование продукции: @cargo.Product.Name</p>
                     }
                 </td>
-                <td>@Html.ActionLink("Добавить груз", "AddCargo", "Order", new { orderId = order.ID })</td>
+                <td>@Html.ActionLink("Добавить груз", "Add", "Cargo", new { orderId = order.ID })</td>
             </tr>
         }
     </table>

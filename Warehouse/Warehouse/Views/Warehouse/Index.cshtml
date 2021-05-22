@@ -27,9 +27,9 @@
                     <p>Код товара</p>
                     <select name="code">
                         <option value=""></option>
-                        @foreach (Product item in ViewBag.Products)
+                        @foreach (string code in ViewBag.Codes)
                         {
-                            <option value="@item.Code">@item.Code</option>
+                            <option value="@code">@code</option>
                         }
                     </select>
                 </div>
@@ -37,9 +37,9 @@
                     <p>Партия</p>
                     <select name="party">
                         <option value=""></option>
-                        @foreach (Product item in ViewBag.Products)
+                        @foreach (string party in ViewBag.Parties)
                         {
-                            <option value="@item.Party">@item.Party</option>
+                            <option value="@party">@party</option>
                         }
                     </select>
                 </div>

@@ -15,6 +15,10 @@ namespace Warehouse.Models
         public DateTime Term { get; set; }
         public string Comment { get; set; }
         public int BoxesInPallete { get; set; }
+        public int NumOfPalletes { get; set; }
         public decimal Cost { get; set; }
+
+        public int PlaceId { get; set; }
+        public Place Place { get; set; }
     }
 }

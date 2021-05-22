@@ -143,9 +143,22 @@ namespace Warehouse
                     pattern: "{controller=Worker}/{action=FullInfo}/{id?}");
 
                 endpoints.MapControllerRoute(
+                    name: "addCustomer",
+                    pattern: "{controller=Customer}/{action=Add}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "deleteCustomer",
+                    pattern: "{controller=Customer}/{action=Delete}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "editCustomer",
+                    pattern: "{controller=Customer}/{action=Edit}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "notFoundCustomer",
                     pattern: "{controller=Customer}/{action=CustomerNotFound}/{id?}");
             });
+
         }
     }
 }

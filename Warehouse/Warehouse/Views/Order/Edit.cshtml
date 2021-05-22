@@ -1,27 +1,51 @@
 ﻿@model Warehouse.Models.Order
 @{
-    ViewData["Title"] = "Редактирование заказа";
+    ViewData["Title"] = "Изменение заказа";
 }
 
-<h3>Форма редактирования заказа</h3>
-@using (Html.BeginForm("Add", "Order", FormMethod.Post))
+<h3>Форма изменения заказа</h3>
+@using (Html.BeginForm("Edit", "Order", FormMethod.Post))
 {
     @Html.Hidden("ID", Model.ID)
     <p>
+        @Html.LabelFor(m => m.Number, "Номер заказа")
+        @Html.TextBoxFor(m => m.Number, new { @required = "required", @value = Model.Number })
+    </p>
+    <p>
         @Html.LabelFor(m => m.Type, "Тип погрузки")
-        @Html.TextBoxFor(m => m.Type, new { @required = "required" })
+        @Html.TextBoxFor(m => m.Type, new { list = "typesOfOrders", @required = "required", @value = Model.Type })
+        <datalist id="typesOfOrders">
+            <option>Отгрузка</option>
+            <option>Выгрузка</option>
+        </datalist>
     </p>
     <p>
         @Html.LabelFor(m => m.ArrivalTime, "Плановое время")
-        @Html.TextBoxFor(m => m.ArrivalTime, new { type = "date", @required = "required" })
+        @Html.TextBoxFor(m => m.ArrivalTime, new { type = "date", @required = "required", @value = Model.ArrivalTime })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Vehicle.Number, "Номер авто")
+        @Html.TextBoxFor(m => m.Vehicle.Number, new { list = "numbersVehicles", @required = "required", @value = Model.Vehicle.Number })
+        <datalist id="numbersVehicles">
+            @foreach (var numberVehicle in ViewBag.NumbersVehicles)
+            {
+                <option value="@numberVehicle">@numberVehicle</option>
+            }
+        </datalist>
     </p>
     <p>
         @Html.LabelFor(m => m.Customer.FIO, "ФИО заказчика")
-        @Html.TextBoxFor(m => m.Customer.FIO, new { @required = "required" })
+        @Html.TextBoxFor(m => m.Customer.FIO, new { @required = "required", @value = Model.Customer.FIO })
     </p>
     <p>
         @Html.LabelFor(m => m.Customer.PhoneNumber, "Номер телефона заказчика")
-        @Html.TextBoxFor(m => m.Customer.PhoneNumber, new { @required = "required" })
+        @Html.TextBoxFor(m => m.Customer.PhoneNumber, new { list = "clientsPhones", @required = "required", @value = Model.Customer.PhoneNumber })
+        <datalist id="clientsPhones">
+            @foreach (var clientPhone in ViewBag.ClientsPhones)
+            {
+                <option value="@clientPhone">@clientPhone</option>
+            }
+        </datalist>
     </p>
     <p><input type="submit" value="Изменить" /></p>
 }

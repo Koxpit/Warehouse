@@ -16,7 +16,7 @@ namespace Warehouse.Services
         private static readonly Font fntHead = FontFactory.GetFont(FONT, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, 20, Font.ITALIC, BaseColor.GREEN);
 
 
-        public static void ExportToPDF(ref List<Place> places)
+        public static void ExportToPDF(ref List<Product> items)
         {
             Document document = new Document();
             document.SetPageSize(PageSize.A4);
@@ -34,7 +34,7 @@ namespace Warehouse.Services
             //Add line break
             document.Add(new Chunk("\n", fntHead));
 
-            document.Add(CreateTableInfo(ref places));
+            document.Add(CreateTableInfo(ref items));
 
             document.Close();
             writer.Close();
@@ -70,9 +70,9 @@ namespace Warehouse.Services
             return new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
         }
 
-        private static PdfPTable CreateTableInfo(ref List<Place> places)
+        private static PdfPTable CreateTableInfo(ref List<Product> products)
         {
-            DataTable dataTable = MakeDataTable(ref places);
+            DataTable dataTable = MakeDataTable(ref products);
             //Write the table
             PdfPTable table = new PdfPTable(dataTable.Columns.Count);
             //Table header
@@ -102,28 +102,28 @@ namespace Warehouse.Services
             return table;
         }
 
-        private static DataTable MakeDataTable(ref List<Place> places)
+        private static DataTable MakeDataTable(ref List<Product> items)
         {
-            DataTable items = new DataTable();
+            DataTable data = new DataTable();
 
-            items.Columns.Add("Склад");
-            items.Columns.Add("Сектор");
-            items.Columns.Add("Ряд");
-            items.Columns.Add("Код");
-            items.Columns.Add("Партия");
-            items.Columns.Add("Срок");
-            items.Columns.Add("Кол-во");
-            items.Columns.Add("Прим");
-            items.Columns.Add("Коробок");
+            data.Columns.Add("Склад");
+            data.Columns.Add("Сектор");
+            data.Columns.Add("Ряд");
+            data.Columns.Add("Код");
+            data.Columns.Add("Партия");
+            data.Columns.Add("Срок");
+            data.Columns.Add("Кол-во");
+            data.Columns.Add("Прим");
+            data.Columns.Add("Коробок");
 
-            for (int i = 0; i < places.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
-                items.Rows.Add(places[i].Storage.Name, places[i].Sector, places[i].Number,
-                    places[i].Product.Code, places[i].Product.Party, places[i].Product.Term.ToShortDateString(), places[i].NumOfPalletes,
-                    places[i].Product.Comment, places[i].Product.BoxesInPallete);
+                data.Rows.Add(items[i].Place.Storage.Name, items[i].Place.Sector, items[i].Place.Number,
+                    items[i].Code, items[i].Party, items[i].Term.ToShortDateString(), items[i].NumOfPalletes,
+                    items[i].Comment, items[i].BoxesInPallete);
             }
 
-            return items;
+            return data;
         }
     }
 }

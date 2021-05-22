@@ -1,0 +1,36 @@
+﻿@model Warehouse.Models.Cargo
+@{
+    ViewData["Title"] = "Добавление груза";
+}
+
+<h3>Форма добавления груза</h3>
+@using (Html.BeginForm("Add", "Cargo", FormMethod.Post))
+{
+    @Html.LabelFor(m => m.OrderId, "ID заказа")
+    @Html.TextBoxFor(m => m.OrderId, new { list = "orderIds", @required = "required", @Value = ViewBag.OrderId })
+    <datalist id="orderIds">
+        @foreach (var orderId in ViewBag.OrdersIds)
+        {
+            <option value="@orderId">@orderId</option>
+        }
+    </datalist>
+    <p>
+        @Html.LabelFor(m => m.Number, "Номер груза")
+        @Html.TextBoxFor(m => m.Number, new { @required = "required", type = "number" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.NumOfPalletes, "Кол-во паллет")
+        @Html.TextBoxFor(m => m.NumOfPalletes, new { type = "number", @required = "required" })
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Product.ID, "Продукт")
+        @Html.TextBoxFor(m => m.Product.ID, new { list = "products", @required = "required" })
+        <datalist id="products">
+            @foreach (var product in ViewBag.Products)
+            {
+                <option value="@product.ID">@product.Name - @product.Code</option>
+            }
+        </datalist>
+    </p>
+    <p><input type="submit" value="Добавить" /></p>
+}

@@ -25,7 +25,15 @@
             <td>Заказчик</td>
             <td>Компания</td>
             <td>Город</td>
-            <td>Номер телефона</td>
+            <td>Номер телефона заказчика</td>
+            <td>Номер авто</td>
+            <td>Вместимость в авто</td>
+            <td>Наименование авто</td>
+            <td>ФИО водителя</td>
+            <td>Номер телефона водителя</td>
+            <td>Опыт водителя</td>
+            <td></td>
+            <td></td>
         </tr>
         <tr align="center">
             <td>@Model.Type</td>
@@ -34,14 +42,14 @@
             <td>@Model.Customer.CompanyName</td>
             <td>@Model.Customer.City</td>
             <td>@Model.Customer.PhoneNumber</td>
+            <td>@Model.Vehicle.Number</td>
+            <td>@Model.Vehicle.Capacity</td>
+            <td>@Model.Vehicle.Name</td>
+            <td>@Model.Vehicle.Driver.FIO</td>
+            <td>@Model.Vehicle.Driver.PhoneNumber</td>
+            <td>@Model.Vehicle.Driver.Experience</td>
+            <td>@Html.ActionLink("Изменить", "Edit", "Order", new { orderId = Model.ID })</td>
+            <td>@Html.ActionLink("Удалить", "Delete", "Order", new { id = Model.ID })</td>
         </tr>
     </table>
-    @using (Html.BeginForm("Delete", "Order", FormMethod.Post))
-    {
-        <button>Удалить</button>
-    }
-    @using (Html.BeginForm("Edit", "Order", FormMethod.Post))
-    {
-        <button>Редактировать</button>
-    }
 </div>

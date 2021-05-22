@@ -31,7 +31,8 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Products = _db.Products.ToList();
+            ViewBag.Codes = _db.Products.Select(x => x.Code).Distinct();
+            ViewBag.Parties = _db.Products.Select(x => x.Party).Distinct();
             ViewBag.Territories = _db.Storages.Select(x => x.Territory).Distinct();
             ViewBag.StoragesNames = _db.Storages.Select(x => x.Name).Distinct();
 
@@ -41,38 +42,38 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult GetSelectedProducts(string code, string party)
         {
-            ViewBag.SelectedProducts = GetPlacesByCodeAndPartyProduct(code, party);
+            ViewBag.SelectedProducts = GetProductsByCodeAndPartyProduct(code, party);
 
             return View("Products");
         }
 
-        private List<Place> GetPlacesByCodeAndPartyProduct(string code, string party)
+        private List<Product> GetProductsByCodeAndPartyProduct(string code, string party)
         {
             if (String.IsNullOrWhiteSpace(party) && String.IsNullOrWhiteSpace(code))
             {
-                return _db.Places.Include(p => p.Product).Include(s => s.Storage).ToList();
+                return _db.Products.Include(p => p.Place).Include(s => s.Place.Storage).ToList();
             }
             else if (String.IsNullOrWhiteSpace(party))
             {
-                return _db.Places.Include(p => p.Product).Include(s => s.Storage)
-                    .Where(p => p.Product.Code == code).ToList();
+                return _db.Products.Include(p => p.Place).Include(s => s.Place.Storage)
+                    .Where(p => p.Code == code).ToList();
             }
 
-            return _db.Places.Include(p => p.Product).Include(s => s.Storage)
-                .Where(p => p.Product.Code == code && p.Product.Party == party).ToList();
+            return _db.Products.Include(p => p.Place).Include(s => s.Place.Storage)
+                .Where(p => p.Code == code && p.Party == party).ToList();
         }
 
         public void GetPdfFile(string code, string party)
         {
-            List<Place> places = GetPlacesByCodeAndPartyProduct(code, party);
-            PdfService.ExportToPDF(ref places);
+            List<Product> items = GetProductsByCodeAndPartyProduct(code, party);
+            PdfService.ExportToPDF(ref items);
         }
 
         [HttpGet]
         public IActionResult SelectProductsInStorage(string storageName)
         {
-            ViewBag.SelectedProducts = _db.Places.Include(p => p.Product).Include(s => s.Storage)
-                .Where(s => s.Storage.Name == storageName).ToList();
+            ViewBag.SelectedProducts = _db.Products.Include(p => p.Place).Include(s => s.Place.Storage)
+                .Where(s => s.Place.Storage.Name == storageName).ToList();
 
             return View("Products");
         }
@@ -113,7 +114,6 @@ namespace Warehouse.Controllers
         public JsonResult GetStoragesJson()
         {
             List<Storage> storages = _db.Storages.ToList();
-            ViewBag.Mass = storages.Select(x => x.StorageImageBase64).ToList();
             return Json(new { data = storages });
         }
 
@@ -121,17 +121,17 @@ namespace Warehouse.Controllers
         public JsonResult GetStorageById(int id)
         {
             Storage storage = _db.Storages.Where(x => x.ID == id).SingleOrDefault();
-            return Json(new { data = storage });
+            return Json(new { data = storage});
         }
 
         [HttpGet]
         public IActionResult Products()
         {
             List<string> storagesNames = _db.Storages.Select(x => x.Name).Distinct().ToList();
-            List<Place> products = new List<Place>();
+            List<Product> products = new List<Product>();
 
             foreach (string name in storagesNames)
-                products.AddRange(_db.Places.Include(p => p.Product).Include(s => s.Storage).Where(s => s.Storage.Name == name).ToList());
+                products.AddRange(_db.Products.Include(p => p.Place.Storage).Include(s => s.Place).Where(s => s.Place.Storage.Name == name).ToList());
 
             ViewBag.SelectedProducts = products;
 

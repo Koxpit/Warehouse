@@ -1,5 +1,4 @@
-﻿@model IEnumerable<Warehouse.Models.Place>
-@{
+﻿@{
     ViewData["Title"] = "Отчет по срокам годности товаров";
 }
 
@@ -18,11 +17,33 @@
 </div>
 <div class="text-left">
     <table style="width:100%;" class="col-md-12">
-        
+        <tr align="center">
+            <td>Наименование</td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var storage in ViewBag.Storages)
+        {
+            <tr align="center">
+                <td>@storage.Territory (@storage.Name)</td>
+            </tr>
+
+            @foreach (var place in storage.Places)
+            {
+                <tr align="center">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @foreach (var product in place.Products)
+                {
+                    <tr align="center">
+                        <td>@product.Code @product.Name @product.Party @product.Term @product.NumOfPalletes @product.BoxesInPallete  </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+            }
+        }
     </table>
-    <br />
-    @using (Html.BeginForm("Add", "Customer", FormMethod.Get))
-    {
-        <button class="form-control">Добавить</button>
-    }
 </div>

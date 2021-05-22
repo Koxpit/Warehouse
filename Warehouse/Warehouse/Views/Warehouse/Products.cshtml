@@ -33,22 +33,22 @@
             <td></td>
             <td></td>
         </tr>
-        @foreach (Place item in ViewBag.SelectedProducts)
+        @foreach (Product item in ViewBag.SelectedProducts)
         {
     <tr align="center">
-        <td>@item.Storage.Name</td>
-        <td>@item.Storage.Territory</td>
-        <td>@item.Sector</td>
-        <td>@item.Number</td>
-        <td>@item.Product.Code</td>
-        <td>@item.Product.Name</td>
-        <td>@item.Product.Party</td>
-        <td>@item.Product.Term.ToShortDateString()</td>
-        <td>@item.Product.BoxesInPallete</td>
-        <td>@item.Product.Comment</td>
-        <td>@item.Product.Cost</td>
+        <td>@item.Place.Storage.Name</td>
+        <td>@item.Place.Storage.Territory</td>
+        <td>@item.Place.Sector</td>
+        <td>@item.Place.Number</td>
+        <td>@item.Code</td>
+        <td>@item.Name</td>
+        <td>@item.Party</td>
+        <td>@item.Term.ToShortDateString()</td>
+        <td>@item.BoxesInPallete</td>
+        <td>@item.Comment</td>
+        <td>@item.Cost</td>
         <td>@item.NumOfPalletes</td>
-        <td>@Html.ActionLink("Изменить", "Edit", "Product", new { placeId = item.ID })</td>
+        <td>@Html.ActionLink("Изменить", "Edit", "Product", new { productId = item.ID })</td>
         <td>@Html.ActionLink("Удалить", "Delete", "Product", new { id = item.ID })</td>
     </tr>
         }

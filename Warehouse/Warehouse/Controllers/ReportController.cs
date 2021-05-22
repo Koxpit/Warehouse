@@ -24,8 +24,7 @@ namespace Warehouse.Controllers
         [HttpGet]
         public IActionResult Expiration()
         {
-            List<Place> places = _db.Places.Include(x => x.Storage).Include(x => x.Product).ToList();
-            return View(places);
+            return View();
         }
     }
 }

@@ -22,43 +22,66 @@ namespace Warehouse.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Place place)
+        public async Task<IActionResult> Add(Product product)
         {
-            Storage foundStorage = FoundStorage(place.Storage);
-
+            Storage foundStorage = FoundStorage(product.Place.Storage);
             if (!_db.Storages.Contains(foundStorage))
                 return Content("Склад не существует");
-            else
+            Place place = _db.Places.Where(x => x.Sector == product.Place.Sector && x.Number == product.Place.Number && x.StorageId == foundStorage.ID).FirstOrDefault();
+            if (place != null)
             {
-                place.Storage = foundStorage;
-                place.StorageId = foundStorage.ID;
+                int numPalletes = 0;
+                foreach (Product item in _db.Products.Where(x => x.PlaceId == place.ID))
+                    numPalletes += item.NumOfPalletes;
+                numPalletes += product.NumOfPalletes;
+
+                if (numPalletes > place.MaxPalletes)
+                    return Content($"Нехватает места для {numPalletes - place.MaxPalletes} паллет в позиции {place.Sector + "/" + place.Number}.");
+
+                product.PlaceId = place.ID;
+                product.Place = place;
             }
 
-            string foundCode = FoundCode(place.Product.Code);
+            if (!_db.Places.Contains(place))
+            {
+                place = new Place()
+                {
+                    MaxPalletes = product.Place.MaxPalletes,
+                    Sector = product.Place.Sector,
+                    Number = product.Place.Number,
+                    StorageId = foundStorage.ID,
+                    Storage = foundStorage
+                };
 
-            if (foundCode == null && place.Product.BoxesInPallete == 0)
+                int numPalletes = 0;
+                if (product.NumOfPalletes < place.MaxPalletes)
+                    return Content($"Нехватает места для {numPalletes - place.MaxPalletes} паллет в позиции {place.Sector + "/" + place.Number}.");
+            }
+
+            string foundCode = FoundCode(product.Code);
+            if (foundCode == null && product.BoxesInPallete == 0)
                 return Content("Введите количество коробов");
             else
-                place.Product.BoxesInPallete = FindBoxesInPallete(place.Product.Code);
+                product.BoxesInPallete = FindBoxesInPallete(product.Code);
 
-            if (place.Product.Party == null)
+            if (product.Party == null)
             {
-                string foundParty = FindParty(place.Product.Term);
+                string foundParty = FindParty(product.Term);
                 if (foundParty == null)
-                    return Content($"Введите партию вручную. По сроку {place.Product.Term.ToShortDateString()} партия не найдена.");
+                    return Content($"Введите партию вручную. По сроку {product.Term.ToShortDateString()} партия не найдена.");
                 else
-                    place.Product.Party = foundParty;
+                    product.Party = foundParty;
             }
             else
             {
                 string existParty = _db.Products
-                    .Where(x => x.Code != place.Product.Code && x.Party == place.Product.Party)
+                    .Where(x => x.Code != product.Code && x.Party == product.Party)
                     .Select(x => x.Party).FirstOrDefault();
                 if (existParty != null)
                     return Content("Введенная партия принадлежит уже другому коду продукта.");
             }
 
-            _db.Places.Add(place);
+            _db.Products.Add(product);
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Products", "Warehouse");
@@ -114,72 +137,84 @@ namespace Warehouse.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Place place)
+        public async Task<IActionResult> Edit(Product product)
         {
-            int numPalletes = NumPalletesInPlace(place) + place.NumOfPalletes;
-            if (numPalletes > 22)
-                return Content($"Нехватает места для {numPalletes - 22} паллет в позиции {place.Sector + "/" + place.Number}.");
-
-            Storage foundStorage = FoundStorage(place.Storage);
+            Storage foundStorage = FoundStorage(product.Place.Storage);
             if (!_db.Storages.Contains(foundStorage))
                 return Content("Склад не существует");
-            else
+
+            Place place = _db.Places.Where(x => x.Sector == product.Place.Sector && x.Number == product.Place.Number && x.StorageId == foundStorage.ID).FirstOrDefault();
+            if (!_db.Places.Contains(place))
             {
-                place.Storage = foundStorage;
-                place.StorageId = foundStorage.ID;
+                place = new Place()
+                {
+                    MaxPalletes = product.Place.MaxPalletes,
+                    Sector = product.Place.Sector,
+                    Number = product.Place.Number,
+                    StorageId = foundStorage.ID,
+                    Storage = foundStorage
+                };
             }
 
-            Place currentPlace = FoundPlace(place.ID);
-            SetProductData(ref currentPlace, ref place, ref foundStorage);
+            product.PlaceId = place.ID;
+            product.Place = place;
+            product.Place.StorageId = foundStorage.ID;
+            product.Place.Storage = foundStorage;
 
-            _db.Places.Update(currentPlace);
+            int currPalletes = _db.Products.Where(x => x.ID == product.ID).Select(x => x.NumOfPalletes).FirstOrDefault();
+            int arrange = product.NumOfPalletes - currPalletes;
+            if (arrange < 0) arrange = 0;
+
+            int numPalletes = NumPalletesInPlace(place.ID) + arrange;
+            if (numPalletes > product.Place.MaxPalletes)
+                return Content($"Нехватает места для {numPalletes - product.Place.MaxPalletes} паллет в позиции {product.Place.Sector + "/" + product.Place.Number}.");
+
+            Product currentProduct = FoundProduct(product.ID);
+            SetProductData(ref currentProduct, ref product);
+
+            _db.Products.Update(currentProduct);
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Products", "Warehouse");
         }
 
-        private int NumPalletesInPlace(Place place)
+        private int NumPalletesInPlace(int placeId)
         {
             int numPalletes = 0;
 
-            foreach (var item in _db.Places.Where(
-                    x => x.Sector == place.Sector && 
-                    x.Number == place.Number && 
-                    x.ID != place.ID && 
-                    x.Storage.Name == place.Storage.Name &&
-                    x.Storage.Address == place.Storage.Address &&
-                    x.Storage.Territory == place.Storage.Territory))
+            foreach (Product item in _db.Products.Where(x => x.PlaceId == placeId))
                 numPalletes += item.NumOfPalletes;
 
             return numPalletes;
         }
 
-        private Place FoundPlace(int placeId)
+        private Product FoundProduct(int productId)
         {
-            return _db.Places.Include(p => p.Product).Include(s => s.Storage).FirstOrDefault(x => x.ID == placeId);
+            return _db.Products.Where(x => x.ID == productId).Include(p => p.Place).Include(s => s.Place.Storage).FirstOrDefault();
         }
 
-        private void SetProductData(ref Place currentPlace, ref Place newPlace, ref Storage foundStorage)
+        private void SetProductData(ref Product currentProduct, ref Product newProduct)
         {
-            currentPlace.Sector = newPlace.Sector;
-            currentPlace.Number = newPlace.Number;
-            currentPlace.NumOfPalletes = newPlace.NumOfPalletes;
-            currentPlace.Product.Name = newPlace.Product.Name;
-            currentPlace.Product.Code = newPlace.Product.Code;
-            currentPlace.Product.Party = newPlace.Product.Party;
-            currentPlace.Product.Term = newPlace.Product.Term;
-            currentPlace.Product.Cost = newPlace.Product.Cost;
-            currentPlace.Storage = foundStorage;
+            currentProduct.NumOfPalletes = newProduct.NumOfPalletes;
+            currentProduct.Name = newProduct.Name;
+            currentProduct.Code = newProduct.Code;
+            currentProduct.Party = newProduct.Party;
+            currentProduct.Term = newProduct.Term;
+            currentProduct.Cost = newProduct.Cost;
+            currentProduct.PlaceId = newProduct.PlaceId;
+            currentProduct.Place = newProduct.Place;
+            currentProduct.Place.StorageId = newProduct.Place.StorageId;
+            currentProduct.Place.Storage = newProduct.Place.Storage;
         }
 
         [HttpGet]
-        public IActionResult Edit(int placeId)
+        public IActionResult Edit(int productId)
         {
             ViewBag.StorageNames = _db.Storages.Select(s => s.Name).Distinct().ToList();
             ViewBag.StorageTerritories = _db.Storages.Select(s => s.Territory).Distinct().ToList();
             ViewBag.Products = _db.Products.ToList();
             ViewBag.Codes = _db.Products.Select(x => x.Code).Distinct().ToList();
-            var currentPlace = _db.Places.Include(p => p.Product).Include(s => s.Storage).FirstOrDefault(x => x.ID == placeId);
+            var currentPlace = _db.Products.Where(x => x.ID == productId).Include(p => p.Place).Include(s => s.Place.Storage).FirstOrDefault();
 
             return View(currentPlace);
         }
@@ -188,9 +223,9 @@ namespace Warehouse.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
-            Place place = await _db.Places.FirstOrDefaultAsync(p => p.ID == id);
-            if (place != null)
-                return View(place);
+            Product product = await _db.Products.FirstOrDefaultAsync(p => p.ID == id);
+            if (product != null)
+                return View(product);
 
             return NotFound();
         }
@@ -198,9 +233,9 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            Place place = new Place { ID = id };
+            Product product = new Product { ID = id };
 
-            _db.Entry(place).State = EntityState.Deleted;
+            _db.Entry(product).State = EntityState.Deleted;
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Products", "Warehouse");
