@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Warehouse.ViewModels
+@model ProductsPageViewModel
+@{
     ViewData["Title"] = "Products";
 }
 
@@ -11,12 +13,42 @@
         padding: 3px;
         border: 1px solid black;
     }
+
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-right:before {
+        content: "\f054";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\f053";
+    }
+    body {
+        background-color: beige;
+    }
+    table.tableProducts {
+        background-color: white;
+    }
 </style>
 <div class="text-center">
     <h1 class="col-md-12">Продукция</h1>
 </div>
 <div class="text-left">
-    <table style="width:100%;" class="col-md-12">
+    <table style="width:100%;" class="col-md-12 tableProducts">
         <tr align="center">
             <td>Склад</td>
             <td>Территория</td>
@@ -33,30 +65,59 @@
             <td></td>
             <td></td>
         </tr>
-        @foreach (Product item in ViewBag.SelectedProducts)
+        @foreach (Product item in Model.Products)
         {
-    <tr align="center">
-        <td>@item.Place.Storage.Name</td>
-        <td>@item.Place.Storage.Territory</td>
-        <td>@item.Place.Sector</td>
-        <td>@item.Place.Number</td>
-        <td>@item.Code</td>
-        <td>@item.Name</td>
-        <td>@item.Party</td>
-        <td>@item.Term.ToShortDateString()</td>
-        <td>@item.BoxesInPallete</td>
-        <td>@item.Comment</td>
-        <td>@item.Cost</td>
-        <td>@item.NumOfPalletes</td>
-        <td>@Html.ActionLink("Изменить", "Edit", "Product", new { productId = item.ID })</td>
-        <td>@Html.ActionLink("Удалить", "Delete", "Product", new { id = item.ID })</td>
-    </tr>
+            <tr align="center">
+                <td>@item.Place.Storage.Name</td>
+                <td>@item.Place.Storage.Territory</td>
+                <td>@item.Place.Sector</td>
+                <td>@item.Place.Number</td>
+                <td>@item.Code</td>
+                <td>@item.Name</td>
+                <td>@item.Party</td>
+                <td>@item.Term.ToShortDateString()</td>
+                <td>@item.BoxesInPallete</td>
+                <td>@item.Comment</td>
+                <td>@item.Cost</td>
+                <td>@item.NumOfPalletes</td>
+                <td>@Html.ActionLink("Изменить", "Edit", "Product", new { productId = item.ID })</td>
+                <td>
+                    <form asp-controller="Product" asp-action="Delete">
+                        <input type="hidden" value="@item.ID" name="id" />
+                        <input type="submit" value="Удалить" onclick="return confirm('Вы точно хотите удалить продукт №@item.ID?');" />
+                    </form>
+                </td>
+            </tr>
         }
     </table>
+    <br />
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a asp-action="Products"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           class="btn btn-outline-dark">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Назад
+        </a>
+    }
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a asp-action="Products"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           class="btn btn-outline-dark">
+            Вперед
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </a>
+    }
     <br />
     @using (Html.BeginForm("Add", "Product", FormMethod.Get))
     {
         <button class="form-control">Добавить</button>
+    }
+    <br />
+    @using (Html.BeginForm("GetPdfFile", "Warehouse", new { storageName = ViewBag.StorageName }))
+    {
+        <button class="form-control">Экспорт в PDF</button>
     }
 </div>
 

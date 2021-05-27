@@ -42,23 +42,39 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Order order)
         {
-            Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
-            Vehicle currentVehicle = _db.Vehicles.FirstOrDefault(x => x.Number == order.Vehicle.Number);
+            if (ModelState.IsValid)
+            {
+                Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
+                Vehicle currentVehicle = _db.Vehicles.FirstOrDefault(x => x.Number == order.Vehicle.Number);
 
-            if (currentCustomer == null)
-                return RedirectToAction("CustomerNotFound", "Customer");
-            else
-                order.Customer = currentCustomer;
+                if (currentCustomer == null)
+                    return RedirectToAction("CustomerNotFound", "Customer");
+                else
+                    order.Customer = currentCustomer;
 
-            if (currentVehicle == null)
-                return Content("Авто не найден.");
-            else
-                order.Vehicle = currentVehicle;
+                if (currentVehicle == null)
+                    return Content("Авто не найден.");
+                else
+                    order.Vehicle = currentVehicle;
 
-            _db.Orders.Add(order);
-            await _db.SaveChangesAsync();
+                UpdateOrderNumber(ref order);
+
+                _db.Orders.Add(order);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Orders", "Warehouse");
+        }
+
+        private void UpdateOrderNumber(ref Order order)
+        {
+            string number = order.Number;
+
+            if (number.Length < 5)
+                for (int i = number.Length; i < 5; i++)
+                    number = "0" + number;
+
+            order.Number = number;
         }
 
         [HttpGet]
@@ -74,36 +90,30 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Order order)
         {
-            if (_db.Orders.FirstOrDefault(x => x.Number == order.Number && x.ID != order.ID) != null)
-                return Content("Заказ с таким номером уже существует.");
+            if (ModelState.IsValid)
+            {
+                if (_db.Orders.FirstOrDefault(x => x.Number == order.Number && x.ID != order.ID) != null)
+                    return Content("Заказ с таким номером уже существует.");
 
-            Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
-            if (currentCustomer == null)
-                return RedirectToAction("CustomerNotFound", "Customer");
-            else
-                order.Customer = currentCustomer;
+                Customer currentCustomer = _db.Customers.FirstOrDefault(x => x.PhoneNumber == order.Customer.PhoneNumber);
+                if (currentCustomer == null)
+                    return RedirectToAction("CustomerNotFound", "Customer");
+                else
+                    order.Customer = currentCustomer;
 
-            Vehicle currentVehicle = _db.Vehicles.FirstOrDefault(x => x.Number == order.Vehicle.Number);
-            if (currentVehicle == null)
-                return Content("Авто не найден.");
-            else
-                order.Vehicle = currentVehicle;
+                Vehicle currentVehicle = _db.Vehicles.FirstOrDefault(x => x.Number == order.Vehicle.Number);
+                if (currentVehicle == null)
+                    return Content("Авто не найден.");
+                else
+                    order.Vehicle = currentVehicle;
 
-            _db.Orders.Update(order);
-            await _db.SaveChangesAsync();
+                UpdateOrderNumber(ref order);
+
+                _db.Orders.Update(order);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Orders", "Warehouse");
-        }
-
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int id)
-        {
-            Order order = await _db.Orders.FirstOrDefaultAsync(p => p.ID == id);
-            if (order != null)
-                return View(order);
-
-            return NotFound();
         }
 
         [HttpPost]

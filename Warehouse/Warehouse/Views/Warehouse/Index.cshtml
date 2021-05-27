@@ -18,11 +18,18 @@
             border: 1px solid black;
             margin-bottom: 10px;
         }
+        body {
+            background: url(../images/mainImage.jpg) no-repeat;
+            background-size: 100%;
+        }
+        div.edit, div.search {
+            background-color: beige;
+        }
     </style>
     <div class="indexContainer">
         <div class="search">
             <form>
-                <h5 class="index-header-h5">Поиск по карте</h5>
+                <h5 class="index-header-h5">Поиск по коду и партии</h5>
                 <div class="productCode">
                     <p>Код товара</p>
                     <select name="code">
@@ -50,7 +57,7 @@
         </div>
         <div class="edit">
             <form>
-                <h5 class="index-header-h5">Редактировать данные</h5>
+                <h5 class="index-header-h5">Поиск по складам</h5>
                 <div class="storageName">
                     <p>Склад</p>
                     <select name="storageName">

@@ -6,9 +6,9 @@ using Warehouse.Models;
 
 namespace Warehouse.ViewModels
 {
-    public class CargoOrderViewModel
+    public class ProductsPageViewModel
     {
-        public int OrderId { get; set; }
-        public Cargo Cargo { get; set; }
+        public IEnumerable<Product> Products { get; set; }
+        public PageViewModel PageViewModel { get; set; }
     }
 }

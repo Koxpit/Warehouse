@@ -12,12 +12,18 @@
         padding: 3px;
         border: 1px solid black;
     }
+    body {
+        background-color: beige;
+    }
+    table.tableCustomers {
+        background-color: white;
+    }
 </style>
 <div class="text-center">
     <h1 class="col-md-12">Продукция</h1>
 </div>
 <div class="text-left">
-    <table style="width:100%;" class="col-md-12">
+    <table style="width:100%;" class="col-md-12 tableCustomers">
         <tr align="center">
             <td>ФИО</td>
             <td>Номер телефона</td>
@@ -28,14 +34,19 @@
         </tr>
         @foreach (var customer in Model)
         {
-            <tr align="center">
-                <td>@customer.FIO</td>
-                <td>@customer.PhoneNumber</td>
-                <td>@customer.CompanyName</td>
-                <td>@customer.City</td>
-                <td>@Html.ActionLink("Изменить", "Edit", "Customer", new { customerId = customer.ID })</td>
-                <td>@Html.ActionLink("Удалить", "Delete", "Customer", new { id = customer.ID })</td>
-            </tr>
+    <tr align="center">
+        <td>@customer.FIO</td>
+        <td>@customer.PhoneNumber</td>
+        <td>@customer.CompanyName</td>
+        <td>@customer.City</td>
+        <td>@Html.ActionLink("Изменить", "Edit", "Customer", new { customerId = customer.ID })
+        <td>
+            <form asp-controller="Customer" asp-action="Delete">
+                <input type="hidden" value="@customer.ID" name="id" />
+                <input type="submit" value="Удалить" onclick="return confirm('Вы точно хотите удалить заказчика @customer.FIO (@customer.PhoneNumber)?');" />
+            </form>
+        </td>
+</tr>
         }
     </table>
     <br />

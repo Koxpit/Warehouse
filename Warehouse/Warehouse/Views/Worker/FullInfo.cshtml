@@ -6,12 +6,12 @@
 
 <style type="text/css">
     TABLE {
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        border: 1px solid black;
     }
 
     TR {
-        padding: 3px; /* Поля вокруг содержимого ячеек */
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        padding: 3px; 
+        border: 1px solid black; 
     }
 </style>
 <div class="text-center">
@@ -47,7 +47,12 @@
             <td>@Model.Passport.IssuedAt</td>
             <td>@Model.Passport.IssuedWas.ToShortDateString()</td>
             <td>@Html.ActionLink("Изменить", "Edit", "Worker", new { workerId = Model.ID })</td>
-            <td>@Html.ActionLink("Удалить", "Delete", "Worker", new { id = Model.ID })</td>
+            <td>
+                <form asp-controller="Worker" asp-action="Delete">
+                    <input type="hidden" value="@Model.ID" name="id" />
+                    <input type="submit" value="Удалить" onclick="return confirm('Вы точно хотите удалить работника №@Model.Number?');" />
+                </form>
+            </td>
         </tr>
     </table>
 </div>

@@ -8,7 +8,7 @@
 {
     @Html.Hidden("ID", Model.ID)
     @Html.LabelFor(m => m.OrderId, "ID заказа")
-    @Html.TextBoxFor(m => m.OrderId, new { list = "orderIds", @required = "required", @Value = ViewBag.OrderId })
+    @Html.TextBoxFor(m => m.OrderId, new { list = "orderIds", @required = "required", @Value = ViewBag.OrderId, min = 0 })
     <datalist id="orderIds">
         @foreach (var orderId in ViewBag.OrdersIds)
         {
@@ -17,11 +17,11 @@
     </datalist>
     <p>
         @Html.LabelFor(m => m.Number, "Номер груза")
-        @Html.TextBoxFor(m => m.Number, new { @required = "required", type = "number" })
+        @Html.TextBoxFor(m => m.Number, new { @required = "required" })
     </p>
     <p>
         @Html.LabelFor(m => m.NumOfPalletes, "Кол-во паллет")
-        @Html.TextBoxFor(m => m.NumOfPalletes, new { type = "number", @required = "required" })
+        @Html.TextBoxFor(m => m.NumOfPalletes, new { type = "number", @required = "required", min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Product.ID, "Продукт")

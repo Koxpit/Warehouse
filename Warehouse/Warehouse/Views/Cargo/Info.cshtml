@@ -6,12 +6,12 @@
 
 <style type="text/css">
     TABLE {
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        border: 1px solid black;
     }
 
     TR {
-        padding: 3px; /* Поля вокруг содержимого ячеек */
-        border: 1px solid black; /* Рамка вокруг таблицы */
+        padding: 3px; 
+        border: 1px solid black; 
     }
 </style>
 <div class="text-left">
@@ -28,7 +28,12 @@
             <td>@Model.NumOfPalletes</td>
             <td>@Model.Order.Number</td>
             <td>@Html.ActionLink("Изменить", "Edit", "Cargo", new { cargoId = Model.ID, orderId = Model.OrderId })</td>
-            <td>@Html.ActionLink("Удалить", "Delete", "Cargo", new { id = Model.ID })</td>
+            <td>
+                <form asp-controller="Cargo" asp-action="Delete">
+                    <input type="hidden" value="@Model.ID" name="id" />
+                    <input type="submit" value="Удалить" onclick="return confirm('Вы точно хотите удалить груз №@Model.Number?');" />
+                </form>
+            </td>
         </tr>
     </table>
 </div>

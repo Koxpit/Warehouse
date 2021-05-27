@@ -24,29 +24,32 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Worker worker)
         {
-            worker.Experience = Math.Abs(worker.Experience);
-            worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
-            worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
-
-            SetWorkerNumber(ref worker);
-
-            if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
-                return Content($"Должность {worker.Position.Name} недоступна.");
-
-            if (_db.Workers.FirstOrDefault(x => x.Number == worker.Number) != null)
-                return Content($"Сотрудник с табельным номером {worker.Number} уже существует.");
-
-            if (_db.Workers.FirstOrDefault(
-                x => x.Passport.Series == worker.Passport.Series && 
-                x.Passport.Number == worker.Passport.Number || 
-                x.PhoneNumber == worker.PhoneNumber) == null)
+            if (ModelState.IsValid)
             {
-                _db.Workers.Add(worker);
-                await _db.SaveChangesAsync();
-            }
-            else
-            {
-                return Content("Сотрудник с введенными паспортными данными / номером телефона уже существует.");
+                worker.Experience = Math.Abs(worker.Experience);
+                worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
+                worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
+
+                SetWorkerNumber(ref worker);
+
+                if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
+                    return Content($"Должность {worker.Position.Name} недоступна.");
+
+                if (_db.Workers.FirstOrDefault(x => x.Number == worker.Number) != null)
+                    return Content($"Сотрудник с табельным номером {worker.Number} уже существует.");
+
+                if (_db.Workers.FirstOrDefault(
+                    x => x.Passport.Series == worker.Passport.Series &&
+                    x.Passport.Number == worker.Passport.Number ||
+                    x.PhoneNumber == worker.PhoneNumber) == null)
+                {
+                    _db.Workers.Add(worker);
+                    await _db.SaveChangesAsync();
+                }
+                else
+                {
+                    return Content("Сотрудник с введенными паспортными данными / номером телефона уже существует.");
+                }
             }
 
             return RedirectToAction("Workers", "Warehouse");
@@ -94,40 +97,43 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Worker worker)
         {
-            worker.Experience = Math.Abs(worker.Experience);
-            worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
-            worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
+            if (ModelState.IsValid)
+            {
+                worker.Experience = Math.Abs(worker.Experience);
+                worker.Number = Math.Abs(Convert.ToInt32(worker.Number)).ToString();
+                worker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
 
-            SetWorkerNumber(ref worker);
+                SetWorkerNumber(ref worker);
 
-            if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
-                return Content($"Должность {worker.Position.Name} недоступна.");
+                if (_db.Positions.FirstOrDefault(x => x.Name == worker.Position.Name) == null)
+                    return Content($"Должность {worker.Position.Name} недоступна.");
 
-            if (_db.Workers.FirstOrDefault(x => x.Number == worker.Number && x.ID != worker.ID) != null)
-                return Content($"Сотрудник с табельным номером {worker.Number} уже существует.");
+                if (_db.Workers.FirstOrDefault(x => x.Number == worker.Number && x.ID != worker.ID) != null)
+                    return Content($"Сотрудник с табельным номером {worker.Number} уже существует.");
 
-            if (_db.Workers.FirstOrDefault(
-                x => x.Passport.Series == worker.Passport.Series &&
-                x.ID != worker.ID &&
-                x.Passport.Number == worker.Passport.Number ||
-                x.PhoneNumber == worker.PhoneNumber && 
-                x.ID != worker.ID) != null)
-                return Content("Сотрудник с введенными паспортными данными / номером телефона уже существует.");
+                if (_db.Workers.FirstOrDefault(
+                    x => x.Passport.Series == worker.Passport.Series &&
+                    x.ID != worker.ID &&
+                    x.Passport.Number == worker.Passport.Number ||
+                    x.PhoneNumber == worker.PhoneNumber &&
+                    x.ID != worker.ID) != null)
+                    return Content("Сотрудник с введенными паспортными данными / номером телефона уже существует.");
 
-            Worker currentWorker = _db.Workers.Include(x => x.Passport).FirstOrDefault(x => x.ID == worker.ID);
-            currentWorker.FIO = worker.FIO;
-            currentWorker.Birthday = worker.Birthday;
-            currentWorker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
-            currentWorker.Experience = worker.Experience;
-            currentWorker.Salary = worker.Salary;
-            currentWorker.PhoneNumber = worker.PhoneNumber;
-            currentWorker.Passport.Series = worker.Passport.Series;
-            currentWorker.Passport.Number = worker.Passport.Number;
-            currentWorker.Passport.IssuedAt = worker.Passport.IssuedAt;
-            currentWorker.Passport.IssuedWas = worker.Passport.IssuedWas;
+                Worker currentWorker = _db.Workers.Include(x => x.Passport).FirstOrDefault(x => x.ID == worker.ID);
+                currentWorker.FIO = worker.FIO;
+                currentWorker.Birthday = worker.Birthday;
+                currentWorker.Position = _db.Positions.FirstOrDefault(p => p.Name == worker.Position.Name);
+                currentWorker.Experience = worker.Experience;
+                currentWorker.Salary = worker.Salary;
+                currentWorker.PhoneNumber = worker.PhoneNumber;
+                currentWorker.Passport.Series = worker.Passport.Series;
+                currentWorker.Passport.Number = worker.Passport.Number;
+                currentWorker.Passport.IssuedAt = worker.Passport.IssuedAt;
+                currentWorker.Passport.IssuedWas = worker.Passport.IssuedWas;
 
-            _db.Workers.Update(currentWorker);
-            await _db.SaveChangesAsync();
+                _db.Workers.Update(currentWorker);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Workers", "Warehouse");
         }
@@ -138,17 +144,6 @@ namespace Warehouse.Controllers
             Worker worker = _db.Workers.Include(p => p.Passport).Include(p => p.Position).FirstOrDefault(w => w.Number == number);
 
             return View(worker);
-        }
-
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int id)
-        {
-            Worker worker = await _db.Workers.FirstOrDefaultAsync(p => p.ID == id);
-            if (worker != null)
-                return View(worker);
-
-            return NotFound();
         }
 
         [HttpPost]

@@ -3,33 +3,67 @@
     ViewData["Title"] = "Редактирование склада";
 }
 
+<script>
+    var hash = {
+        '.jpg': 1,
+        '.jpeg': 1,
+        '.png': 1
+    };
+
+    function check_extension(filename, submitId) {
+        var re = /\..+$/;
+        var ext = filename.match(re);
+        var submitEl = document.getElementById(submitId);
+        if (hash[ext]) {
+            submitEl.disabled = false;
+            return true;
+        } else {
+            alert("Вы можете выбрать только файлы расширения .jpg, .jpeg, .png");
+            submitEl.disabled = true;
+
+            return false;
+        }
+    }
+</script>
+
 <h3>Форма редактирования склада</h3>
 @using (Html.BeginForm("Edit", "Storage", FormMethod.Post))
 {
     @Html.Hidden("ID", Model.ID)
-<p>
-    @Html.LabelFor(m => m.Name, "Наименование склада")
-    @Html.TextBoxFor(m => m.Name, new { list = "names", @required = "required", @value = Model.Name })
-    <datalist id="names">
-        @foreach (var name in ViewBag.NamesStorages)
-        {
-            <option value="@name">@name</option>
-        }
-    </datalist>
-</p>
-<p>
-    @Html.LabelFor(m => m.Territory, "Территория склада")
-    @Html.TextBoxFor(m => m.Territory, new { list = "territories", @required = "required", @value = Model.Territory })
-    <datalist id="territories">
-        @foreach (var territory in ViewBag.StoragesTerritories)
-        {
-            <option value="@territory">@territory</option>
-        }
-    </datalist>
-</p>
-<p>
-    @Html.LabelFor(m => m.Address, "Город")
-    @Html.TextBoxFor(m => m.Address, new { @required = "required", @value = Model.Address })
-</p>
-    <p><input type="submit" value="Изменить" /></p>
+    <p>
+        @Html.LabelFor(m => m.Name, "Наименование склада")
+        @Html.TextBoxFor(m => m.Name, new { list = "names", @required = "required", @value = Model.Name })
+        <datalist id="names">
+            @foreach (string name in ViewBag.NamesStorages)
+            {
+                <option value="@name">@name</option>
+            }
+        </datalist>
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Territory, "Территория склада")
+        @Html.TextBoxFor(m => m.Territory, new { list = "territories", @required = "required", @value = Model.Territory })
+        <datalist id="territories">
+            @foreach (string territory in ViewBag.StoragesTerritories)
+            {
+                <option value="@territory">@territory</option>
+            }
+        </datalist>
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Address, "Адрес")
+        @Html.TextBoxFor(m => m.Address, new { list = "addresses", @required = "required", @value = Model.Address })
+        <datalist id="addresses">
+            @foreach (string address in ViewBag.AddressStorages)
+            {
+                <option value="@address">@address</option>
+            }
+        </datalist>
+    </p>
+    <p>
+        @Html.Raw("<img style='width:200px; height:200px;' src=\"data:image/jpeg;base64,"
+                                + Convert.ToBase64String(Model.StorageImage) + "\" />")
+    </p>
+    <input type="file" name="uploadImage" onchange="check_extension(this.value,'upload');" />
+    <input type="submit" id="upload" name="upload" value="Изменить" disabled="disabled" />
 }

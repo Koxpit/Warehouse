@@ -30,11 +30,14 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Position position)
         {
-            if (_db.Positions.FirstOrDefault(x => x.Name == position.Name) != null)
-                return Content("Должность уже существует.");
+            if (ModelState.IsValid)
+            {
+                if (_db.Positions.FirstOrDefault(x => x.Name == position.Name) != null)
+                    return Content("Должность уже существует.");
 
-            _db.Positions.Add(position);
-            await _db.SaveChangesAsync();
+                _db.Positions.Add(position);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Positions", "Warehouse");
         }
@@ -50,33 +53,25 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Position position)
         {
-            if (_db.Positions.FirstOrDefault(x => x.Name == position.Name && x.ID != position.ID) != null)
-                return Content("Должность уже существует.");
+            if (ModelState.IsValid)
+            {
+                if (_db.Positions.FirstOrDefault(x => x.Name == position.Name && x.ID != position.ID) != null)
+                    return Content("Должность уже существует.");
 
-            Position currentPosition = _db.Positions.FirstOrDefault(x => x.ID == position.ID);
-            currentPosition.Name = position.Name;
+                Position currentPosition = _db.Positions.FirstOrDefault(x => x.ID == position.ID);
+                currentPosition.Name = position.Name;
 
-            _db.Positions.Update(currentPosition);
-            await _db.SaveChangesAsync();
+                _db.Positions.Update(currentPosition);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Positions", "Warehouse");
         }
 
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int positionId)
-        {
-            Position position = await _db.Positions.FirstOrDefaultAsync(p => p.ID == positionId);
-            if (position != null)
-                return View(position);
-
-            return NotFound();
-        }
-
         [HttpPost]
-        public async Task<IActionResult> Delete(int positionId)
+        public async Task<IActionResult> Delete(int id)
         {
-            Position position = new Position { ID = positionId };
+            Position position = new Position { ID = id };
 
             _db.Entry(position).State = EntityState.Deleted;
             await _db.SaveChangesAsync();

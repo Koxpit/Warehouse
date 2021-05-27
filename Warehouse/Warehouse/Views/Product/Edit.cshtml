@@ -29,15 +29,15 @@
     </p>
     <p>
         @Html.LabelFor(m => m.Place.Sector, "Сектор")
-        @Html.TextBoxFor(m => m.Place.Sector, new { @required = "required", @value = Model.Place.Sector })
+        @Html.TextBoxFor(m => m.Place.Sector, new { @required = "required", @value = Model.Place.Sector, min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Place.Number, "Ряд")
-        @Html.TextBoxFor(m => m.Place.Number, new { @required = "required", @value = Model.Place.Number })
+        @Html.TextBoxFor(m => m.Place.Number, new { @required = "required", @value = Model.Place.Number, min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Place.MaxPalletes, "Вместимость(паллет)")
-        @Html.TextBoxFor(m => m.Place.MaxPalletes, new { @required = "required", @value = Model.Place.MaxPalletes })
+        @Html.TextBoxFor(m => m.Place.MaxPalletes, new { @required = "required", @value = Model.Place.MaxPalletes, min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Name, "Наименование продукции")
@@ -55,7 +55,7 @@
     </p>
     <p>
         @Html.LabelFor(m => m.BoxesInPallete, "Кол-во коробов в паллете")
-        @Html.TextBoxFor(m => m.BoxesInPallete, new { @value = Model.BoxesInPallete })
+        @Html.TextBoxFor(m => m.BoxesInPallete, new { @value = Model.BoxesInPallete, min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Party, "Партия")
@@ -71,7 +71,7 @@
     </p>
     <p>
         @Html.LabelFor(m => m.NumOfPalletes, "Кол-во паллет")
-        @Html.TextBoxFor(m => m.NumOfPalletes, new { @required = "required", @value = Model.NumOfPalletes })
+        @Html.TextBoxFor(m => m.NumOfPalletes, new { @required = "required", @value = Model.NumOfPalletes, min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Cost, "Стоимость паллеты")

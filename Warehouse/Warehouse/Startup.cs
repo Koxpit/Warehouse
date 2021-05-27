@@ -55,6 +55,10 @@ namespace Warehouse
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "products",
+                    pattern: "{controller=Warehouse}/{action=Products}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "workers",
                     pattern: "{controller=Warehouse}/{action=Workers}/{id?}");
 
@@ -79,20 +83,12 @@ namespace Warehouse
                     pattern: "{controller=Warehouse}/{action=Orders}/{id?}");
 
                 endpoints.MapControllerRoute(
-                    name: "products",
-                    pattern: "{controller=Warehouse}/{action=Products}/{id?}");
-
-                endpoints.MapControllerRoute(
                     name: "positions",
                     pattern: "{controller=Warehouse}/{action=Positions}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "addProduct",
                     pattern: "{controller=Product}/{action=Add}/{id?}");
-
-                endpoints.MapControllerRoute(
-                    name: "deleteProduct",
-                    pattern: "{controller=Product}/{action=Delete}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "editProduct",
@@ -110,17 +106,10 @@ namespace Warehouse
                     name: "editOrder",
                     pattern: "{controller=Order}/{action=Edit}/{id?}");
 
-                endpoints.MapControllerRoute(
-                    name: "deleteOrder",
-                    pattern: "{controller=Order}/{action=Delete}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "addStorage",
                     pattern: "{controller=Storage}/{action=Add}/{id?}");
-
-                endpoints.MapControllerRoute(
-                    name: "deleteStorage",
-                    pattern: "{controller=Storage}/{action=Delete}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "editStorage",
@@ -129,10 +118,6 @@ namespace Warehouse
                 endpoints.MapControllerRoute(
                     name: "addWorker",
                     pattern: "{controller=Worker}/{action=Add}/{id?}");
-
-                endpoints.MapControllerRoute(
-                    name: "deleteWorker",
-                    pattern: "{controller=Worker}/{action=Delete}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "editWorker",
@@ -147,10 +132,6 @@ namespace Warehouse
                     pattern: "{controller=Customer}/{action=Add}/{id?}");
 
                 endpoints.MapControllerRoute(
-                    name: "deleteCustomer",
-                    pattern: "{controller=Customer}/{action=Delete}/{id?}");
-
-                endpoints.MapControllerRoute(
                     name: "editCustomer",
                     pattern: "{controller=Customer}/{action=Edit}/{id?}");
 
@@ -158,7 +139,6 @@ namespace Warehouse
                     name: "notFoundCustomer",
                     pattern: "{controller=Customer}/{action=CustomerNotFound}/{id?}");
             });
-
         }
     }
 }

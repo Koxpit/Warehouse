@@ -42,43 +42,58 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Cargo cargo)
         {
-            Product product = _db.Products.Where(x => x.ID == cargo.Product.ID).FirstOrDefault();
-            cargo.ProductId = product.ID;
-            cargo.Product = product;
-            Order order = _db.Orders.Where(x => x.ID == cargo.OrderId).FirstOrDefault();
-            cargo.OrderId = order.ID;
-            cargo.Order = order;
-
-            Cargo existCargo = _db.Cargos.Where(x => x.Number == cargo.Number && x.Product.Name == cargo.Product.Name).FirstOrDefault();
-            if (existCargo != null)
+            if (ModelState.IsValid)
             {
-                int numPalletes = 0;
+                Product product = _db.Products.Where(x => x.ID == cargo.Product.ID).FirstOrDefault();
+                cargo.ProductId = product.ID;
+                cargo.Product = product;
+                Order order = _db.Orders.Where(x => x.ID == cargo.OrderId).FirstOrDefault();
+                cargo.OrderId = order.ID;
+                cargo.Order = order;
+
+                Cargo existCargo = _db.Cargos.Where(x => x.Number == cargo.Number && x.Product.Name == cargo.Product.Name).FirstOrDefault();
+                if (existCargo != null)
+                {
+                    int numPalletes = 0;
+                    foreach (Cargo item in _db.Cargos.Where(x => x.OrderId == cargo.OrderId))
+                        numPalletes += item.NumOfPalletes;
+
+                    numPalletes += cargo.NumOfPalletes;
+                    if (numPalletes > 22)
+                        return Content("Превышено максимальное количество паллет(22) для заказа " + cargo.OrderId);
+                    else
+                        existCargo.NumOfPalletes += cargo.NumOfPalletes;
+
+                    _db.Cargos.Update(existCargo);
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction("Orders", "Warehouse");
+                }
+
+                int palletes = 0;
                 foreach (Cargo item in _db.Cargos.Where(x => x.OrderId == cargo.OrderId))
-                    numPalletes += item.NumOfPalletes;
+                    palletes += item.NumOfPalletes;
+                palletes += cargo.NumOfPalletes;
 
-                numPalletes += cargo.NumOfPalletes;
-                if (numPalletes > 22)
+                if (palletes > 22)
                     return Content("Превышено максимальное количество паллет(22) для заказа " + cargo.OrderId);
-                else
-                    existCargo.NumOfPalletes += cargo.NumOfPalletes;
 
-                _db.Cargos.Update(existCargo);
+                string newCargoNumber = UpdateCargoNumber(cargo.Number);
+                cargo.Number = newCargoNumber;
+
+                _db.Cargos.Add(cargo);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Orders", "Warehouse");
             }
 
-            int palletes = 0;
-            foreach (Cargo item in _db.Cargos.Where(x => x.OrderId == cargo.OrderId))
-                palletes += item.NumOfPalletes;
-            palletes += cargo.NumOfPalletes;
-
-            if (palletes > 22)
-                return Content("Превышено максимальное количество паллет(22) для заказа " + cargo.OrderId);
-
-            _db.Cargos.Add(cargo);
-            await _db.SaveChangesAsync();
-
             return RedirectToAction("Orders", "Warehouse");
+        }
+
+        private string UpdateCargoNumber(string number)
+        {
+            if (number.Length < 8)
+                for (int i = number.Length; i < 8; i++)
+                    number = "0" + number;
+
+            return number;
         }
 
         [HttpGet]
@@ -95,45 +110,40 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Cargo cargo)
         {
-            if (_db.Cargos.FirstOrDefault(x => x.Number == cargo.Number && x.ID != cargo.ID) != null)
-                return Content("Груз с таким номером уже существует.");
+            if (ModelState.IsValid)
+            {
+                if (_db.Cargos.FirstOrDefault(x => x.Number == cargo.Number && x.ID != cargo.ID) != null)
+                    return Content("Груз с таким номером уже существует.");
 
-            Product product = _db.Products.Where(x => x.ID == cargo.Product.ID).FirstOrDefault();
-            if (product == null)
-                return Content("Продукт не существует.");
+                Product product = _db.Products.Where(x => x.ID == cargo.Product.ID).FirstOrDefault();
+                if (product == null)
+                    return Content("Продукт не существует.");
 
-            cargo.ProductId = product.ID;
-            cargo.Product = product;
+                cargo.ProductId = product.ID;
+                cargo.Product = product;
 
-            Order order = _db.Orders.Where(x => x.ID == cargo.OrderId).FirstOrDefault();
-            if (order == null)
-                return Content("Заказ не существует.");
+                Order order = _db.Orders.Where(x => x.ID == cargo.OrderId).FirstOrDefault();
+                if (order == null)
+                    return Content("Заказ не существует.");
 
-            cargo.OrderId = order.ID;
-            cargo.Order = order;
+                cargo.OrderId = order.ID;
+                cargo.Order = order;
 
-            int numPalletes = 0;
-            foreach (Cargo item in _db.Cargos.Where(x => x.OrderId == cargo.OrderId && x.ID != cargo.ID))
-                numPalletes += item.NumOfPalletes;
+                int numPalletes = 0;
+                foreach (Cargo item in _db.Cargos.Where(x => x.OrderId == cargo.OrderId && x.ID != cargo.ID))
+                    numPalletes += item.NumOfPalletes;
 
-            if (numPalletes > 22)
-                return Content("Превышено максимальное количество паллет(22) для заказа " + cargo.OrderId);
+                if (numPalletes > 22)
+                    return Content("Превышено максимальное количество паллет(22) для заказа " + cargo.OrderId);
 
-            _db.Cargos.Update(cargo);
-            await _db.SaveChangesAsync();
+                string newCargoNumber = UpdateCargoNumber(cargo.Number);
+                cargo.Number = newCargoNumber;
+
+                _db.Cargos.Update(cargo);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Orders", "Warehouse");
-        }
-
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int id)
-        {
-            Cargo cargo = await _db.Cargos.FirstOrDefaultAsync(p => p.ID == id);
-            if (cargo != null)
-                return View(cargo);
-
-            return NotFound();
         }
 
         [HttpPost]

@@ -12,6 +12,9 @@
     h1.wahouseTitle {
         text-align: center;
     }
+    body {
+        background-color: beige;
+    }
 </style>
 <script>
     var map;
@@ -93,7 +96,7 @@
     <h1 class="wahouseTitle">Наши склады</h1>
     <div>
         <select class="form-control" id="selectedStorage" onchange="GoLocation(this.value)">
-            <option>--Select--</option>
+            <option>--Выбрать--</option>
             @foreach (var storage in ViewBag.ListOfStorages)
             {
                 <option value="@storage.ID">@storage.Name | @storage.Territory | @storage.Address</option>

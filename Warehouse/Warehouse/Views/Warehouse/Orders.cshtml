@@ -1,51 +1,104 @@
-﻿@{
+﻿@using Warehouse.ViewModels
+@model OrdersPageViewModel
+@{
     ViewData["Title"] = "Orders";
 }
 
-<style type="text/css">
-    TABLE {
-        border: 1px solid black;
-    }
-
-    TR {
-        padding: 3px;
-        border: 1px solid black;
-    }
-</style>
-<div class="text-center">
-    <h1 class="col-md-12">Заказы</h1>
-</div>
-<div class="text-left">
-    <table style="width:100%;" class="col-md-12">
-        <tr align="center">
-            <td>Номер заказа</td>
-            <td>Тип</td>
-            <td>Плановое время</td>
-            <td>Грузы</td>
-            <td></td>
-        </tr>
-        @foreach (Order order in ViewBag.Orders)
-        {
-            <tr align="center">
-                <td>@Html.ActionLink(order.ID.ToString(), "Info", "Order", new { orderId = order.ID })</td>
-                <td>@order.Type</td>
-                <td>@order.ArrivalTime.ToShortDateString()</td>
-                <td>
-                    @foreach (Cargo cargo in order.Cargos)
-                    {
-                        <p>Номер груза: @Html.ActionLink(cargo.Number, "Info", "Cargo", new { cargoId = cargo.ID })</p>
-                        <p>Количество паллет: @cargo.NumOfPalletes</p>
-                        <p>Наименование продукции: @cargo.Product.Name</p>
-                    }
-                </td>
-                <td>@Html.ActionLink("Добавить груз", "Add", "Cargo", new { orderId = order.ID })</td>
-            </tr>
+    <style type="text/css">
+        TABLE {
+            border: 1px solid black;
         }
-    </table>
-    <br />
-    @using (Html.BeginForm("Add", "Order", FormMethod.Get))
-    {
-        <button class="form-control">Добавить</button>
-    }
-</div>
+
+        TR {
+            padding: 3px;
+            border: 1px solid black;
+        }
+
+        @@font-face {
+            font-family: 'FontAwesome';
+            src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal
+        }
+
+        .glyphicon {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale
+        }
+
+        .glyphicon-chevron-right:before {
+            content: "\f054";
+        }
+
+        .glyphicon-chevron-left:before {
+            content: "\f053";
+        }
+        body {
+            background-color: beige;
+        }
+        table.tableOrders {
+            background-color: white;
+        }
+    </style>
+<div class="orders">
+    <div class="text-center">
+        <h1 class="col-md-12">Заказы</h1>
+    </div>
+    <div class="text-left">
+        <table style="width:100%;" class="col-md-12 tableOrders">
+            <tr align="center">
+                <td>Номер заказа</td>
+                <td>Тип</td>
+                <td>Плановое время</td>
+                <td>Грузы</td>
+                <td></td>
+            </tr>
+            @foreach (Order order in ViewBag.Orders)
+            {
+                <tr align="center">
+                    <td>@Html.ActionLink(order.ID.ToString(), "Info", "Order", new { orderId = order.ID })</td>
+                    <td>@order.Type</td>
+                    <td>@order.ArrivalTime.ToShortDateString()</td>
+                    <td>
+                        @foreach (Cargo cargo in order.Cargos)
+                        {
+                            <p>Номер груза: @Html.ActionLink(cargo.Number, "Info", "Cargo", new { cargoId = cargo.ID })</p>
+                            <p>Наименование продукции: @cargo.Product.Name</p>
+                            <p>Количество паллет: @cargo.NumOfPalletes</p>
+                        }
+                    </td>
+                    <td>@Html.ActionLink("Добавить груз", "Add", "Cargo", new { orderId = order.ID })</td>
+                </tr>
+            }
+        </table>
+        <br />
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="Products"
+               asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+               class="btn btn-outline-dark">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Назад
+            </a>
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <a asp-action="Products"
+               asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+               class="btn btn-outline-dark">
+                Вперед
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        }
+        <br />
+        @using (Html.BeginForm("Add", "Order", FormMethod.Get))
+        {
+            <button class="form-control">Добавить</button>
+        }
+    </div>
+   </div>
 

@@ -23,15 +23,14 @@
                 <option value="@position">@position</option>
             }
         </datalist>
-
     </p>
     <p>
         @Html.LabelFor(m => m.Experience, "Опыт работы")
-        @Html.TextBoxFor(m => m.Experience, new { type = "number", @required = "required", maxLength = 2 })
+        @Html.TextBoxFor(m => m.Experience, new { type = "number", @required = "required", min = 0, max = 90 })
     </p>
     <p>
         @Html.LabelFor(m => m.Salary, "Зарплата")
-        @Html.TextBoxFor(m => m.Salary, new { type = "number", @required = "required" })
+        @Html.TextBoxFor(m => m.Salary, new { type = "number", @required = "required", min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.PhoneNumber, "Номер телефона")
@@ -39,15 +38,15 @@
     </p>
     <p>
         @Html.LabelFor(m => m.Number, "Табельный номер")
-        @Html.TextBoxFor(m => m.Number, new { type = "number", @required = "required", maxLength = 3 })
+        @Html.TextBoxFor(m => m.Number, new { type = "number", @required = "required", min = 0, maxLength = 5 })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.Series, "Серия паспорта")
-        @Html.TextBoxFor(m => m.Passport.Series, new { @required = "required", maxLength = 4, minlength = 4 })
+        @Html.TextBoxFor(m => m.Passport.Series, new { @required = "required", maxLength = 4, minlength = 4, type = "number", min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.Number, "Номер паспорта")
-        @Html.TextBoxFor(m => m.Passport.Number, new { @required = "required", maxLength = 6, minlength = 6 })
+        @Html.TextBoxFor(m => m.Passport.Number, new { @required = "required", maxLength = 6, minlength = 6, type = "number", min = 0 })
     </p>
     <p>
         @Html.LabelFor(m => m.Passport.IssuedAt, "Кем выдан")

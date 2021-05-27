@@ -63,19 +63,43 @@ namespace Warehouse.Controllers
                 .Where(p => p.Code == code && p.Party == party).ToList();
         }
 
-        public void GetPdfFile(string code, string party)
+        [HttpGet]
+        public IActionResult GetPdfFile(string code, string party)
         {
             List<Product> items = GetProductsByCodeAndPartyProduct(code, party);
             PdfService.ExportToPDF(ref items);
+
+            return Content("Файл успешно создан.");
+        }
+
+        public IActionResult GetPdfFile(string storageName)
+        {
+            List<Product> items = _db.Products.Where(x => x.Place.Storage.Name == storageName).Include(x => x.Place).Include(x => x.Place.Storage).ToList();
+            PdfService.ExportToPDF(ref items);
+
+            return Content("Очет успешно создан.");
         }
 
         [HttpGet]
-        public IActionResult SelectProductsInStorage(string storageName)
+        public IActionResult SelectProductsInStorage(string storageName, int page = 1)
         {
-            ViewBag.SelectedProducts = _db.Products.Include(p => p.Place).Include(s => s.Place.Storage)
+            List<Product> products = _db.Products.Include(p => p.Place).Include(s => s.Place.Storage)
                 .Where(s => s.Place.Storage.Name == storageName).ToList();
 
-            return View("Products");
+            int pageSize = 15;
+            int count = products.Count();
+            List<Product> selectedItems = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            ProductsPageViewModel viewModel = new ProductsPageViewModel
+            {
+                PageViewModel = pageViewModel,
+                Products = selectedItems
+            };
+
+            ViewBag.StorageName = storageName;
+
+            return View("Products", viewModel);
         }
 
         [HttpGet]
@@ -125,25 +149,46 @@ namespace Warehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products()
+        public IActionResult Products(int page = 1)
         {
+            int pageSize = 15;
             List<string> storagesNames = _db.Storages.Select(x => x.Name).Distinct().ToList();
             List<Product> products = new List<Product>();
 
             foreach (string name in storagesNames)
                 products.AddRange(_db.Products.Include(p => p.Place.Storage).Include(s => s.Place).Where(s => s.Place.Storage.Name == name).ToList());
 
-            ViewBag.SelectedProducts = products;
+            int count = products.Count();
+            List<Product> selectedItems = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            return View();
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            ProductsPageViewModel viewModel = new ProductsPageViewModel
+    		{
+                PageViewModel = pageViewModel,
+			    Products = selectedItems
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult Orders()
+        public IActionResult Orders(int page = 1)
         {
-            ViewBag.Orders = _db.Orders.Where(d => d.ArrivalTime > DateTime.Now).Include(c => c.Cargos).ThenInclude(p => p.Product).ToList();
+            ViewBag.Orders = _db.Orders.Include(c => c.Cargos).ThenInclude(p => p.Product).ToList();
+            int pageSize = 10;
 
-            return View();
+            List<Order> orders = _db.Orders.Include(c => c.Cargos).ThenInclude(p => p.Product).ToList();
+            var count = orders.Count();
+            List<Order> selectedOrders = orders.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            OrdersPageViewModel viewModel = new OrdersPageViewModel
+            {
+                PageViewModel = pageViewModel,
+                Orders = selectedOrders
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]

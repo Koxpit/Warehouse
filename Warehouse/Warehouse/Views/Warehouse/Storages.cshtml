@@ -12,26 +12,39 @@
         padding: 3px;
         border: 1px solid black;
     }
+    body {
+        background-color: beige;
+    }
+    table.tableStorages {
+        background-color: white;
+    }
 </style>
 <div class="text-center">
-    <h1 class="col-md-12">Продукция</h1>
+    <h1 class="col-md-12">Склады</h1>
 </div>
 <div class="text-left">
-    <table style="width:100%;" class="col-md-12">
+    <table style="width:100%;" class="col-md-12 tableStorages">
         <tr align="center">
             <td>Наименование</td>
             <td>Территория</td>
             <td>Адрес</td>
             <td></td>
+            <td></td>
         </tr>
         @foreach (var storage in Model)
         {
-            <tr align="center">
-                <td>@Html.ActionLink(storage.Name, "SelectProductsInStorage", "Warehouse", new { storageName = storage.Name })</td>
-                <td>@storage.Territory</td>
-                <td>@storage.Address</td>
-                <td>@Html.ActionLink("Изменить", "Edit", "Storage", new { storageId = storage.ID })</td>
-            </tr>
+    <tr align="center">
+        <td>@Html.ActionLink(storage.Name, "SelectProductsInStorage", "Warehouse", new { storageName = storage.Name })</td>
+        <td>@storage.Territory</td>
+        <td>@storage.Address</td>
+        <td>@Html.ActionLink("Изменить", "Edit", "Storage", new { storageId = storage.ID })</td>
+        <td>
+            <form asp-controller="Storage" asp-action="Delete">
+                <input type="hidden" value="@storage.ID" name="id" />
+                <input type="submit" value="Удалить" onclick="return confirm('Вы точно хотите удалить склад @storage.Name (@storage.Territory), находящийся по адресу @storage.Address?');" />
+            </form>
+        </td>
+    </tr>
         }
     </table>
     <br />

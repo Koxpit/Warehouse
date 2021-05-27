@@ -36,11 +36,14 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Customer customer)
         {
-            if (_db.Customers.FirstOrDefault(c => c.PhoneNumber == customer.PhoneNumber) != null)
-                return Content("Заказчик с таким номером телефона уже существует.");
+            if (ModelState.IsValid)
+            {
+                if (_db.Customers.FirstOrDefault(c => c.PhoneNumber == customer.PhoneNumber) != null)
+                    return Content("Заказчик с таким номером телефона уже существует.");
 
-            _db.Customers.Add(customer);
-            await _db.SaveChangesAsync();
+                _db.Customers.Add(customer);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Customers", "Warehouse");
         }
@@ -54,24 +57,16 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Customer customer)
         {
-            if (_db.Customers.FirstOrDefault(c => c.PhoneNumber == customer.PhoneNumber && c.ID != customer.ID) != null)
-                return Content("Заказчик с таким номером телефона уже существует.");
+            if (ModelState.IsValid)
+            {
+                if (_db.Customers.FirstOrDefault(c => c.PhoneNumber == customer.PhoneNumber && c.ID != customer.ID) != null)
+                    return Content("Заказчик с таким номером телефона уже существует.");
 
-            _db.Customers.Update(customer);
-            await _db.SaveChangesAsync();
+                _db.Customers.Update(customer);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Customers", "Warehouse");
-        }
-
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int id)
-        {
-            Customer customer = await _db.Customers.FirstOrDefaultAsync(p => p.ID == id);
-            if (customer != null)
-                return View(customer);
-
-            return NotFound();
         }
 
         [HttpPost]

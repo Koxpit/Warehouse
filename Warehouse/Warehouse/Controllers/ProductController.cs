@@ -24,67 +24,83 @@ namespace Warehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Product product)
         {
-            Storage foundStorage = FoundStorage(product.Place.Storage);
-            if (!_db.Storages.Contains(foundStorage))
-                return Content("Склад не существует");
-            Place place = _db.Places.Where(x => x.Sector == product.Place.Sector && x.Number == product.Place.Number && x.StorageId == foundStorage.ID).FirstOrDefault();
-            if (place != null)
+            if (ModelState.IsValid)
             {
-                int numPalletes = 0;
-                foreach (Product item in _db.Products.Where(x => x.PlaceId == place.ID))
-                    numPalletes += item.NumOfPalletes;
-                numPalletes += product.NumOfPalletes;
-
-                if (numPalletes > place.MaxPalletes)
-                    return Content($"Нехватает места для {numPalletes - place.MaxPalletes} паллет в позиции {place.Sector + "/" + place.Number}.");
-
-                product.PlaceId = place.ID;
-                product.Place = place;
-            }
-
-            if (!_db.Places.Contains(place))
-            {
-                place = new Place()
+                Storage foundStorage = FoundStorage(product.Place.Storage);
+                if (!_db.Storages.Contains(foundStorage))
+                    return Content("Склад не существует");
+                Place place = _db.Places.Where(x => x.Sector == product.Place.Sector && x.Number == product.Place.Number && x.StorageId == foundStorage.ID).FirstOrDefault();
+                if (place != null)
                 {
-                    MaxPalletes = product.Place.MaxPalletes,
-                    Sector = product.Place.Sector,
-                    Number = product.Place.Number,
-                    StorageId = foundStorage.ID,
-                    Storage = foundStorage
-                };
+                    int numPalletes = 0;
+                    foreach (Product item in _db.Products.Where(x => x.PlaceId == place.ID))
+                        numPalletes += item.NumOfPalletes;
+                    numPalletes += product.NumOfPalletes;
 
-                int numPalletes = 0;
-                if (product.NumOfPalletes < place.MaxPalletes)
-                    return Content($"Нехватает места для {numPalletes - place.MaxPalletes} паллет в позиции {place.Sector + "/" + place.Number}.");
-            }
+                    if (numPalletes > place.MaxPalletes)
+                        return Content($"Нехватает места для {numPalletes - place.MaxPalletes} паллет в позиции {place.Sector + "/" + place.Number}.");
 
-            string foundCode = FoundCode(product.Code);
-            if (foundCode == null && product.BoxesInPallete == 0)
-                return Content("Введите количество коробов");
-            else
-                product.BoxesInPallete = FindBoxesInPallete(product.Code);
+                    product.PlaceId = place.ID;
+                    product.Place = place;
+                }
 
-            if (product.Party == null)
-            {
-                string foundParty = FindParty(product.Term);
-                if (foundParty == null)
-                    return Content($"Введите партию вручную. По сроку {product.Term.ToShortDateString()} партия не найдена.");
+                if (!_db.Places.Contains(place))
+                {
+                    place = new Place()
+                    {
+                        MaxPalletes = product.Place.MaxPalletes,
+                        Sector = product.Place.Sector,
+                        Number = product.Place.Number,
+                        StorageId = foundStorage.ID,
+                        Storage = foundStorage
+                    };
+
+                    int numPalletes = 0;
+                    if (product.NumOfPalletes < place.MaxPalletes)
+                        return Content($"Нехватает места для {numPalletes - place.MaxPalletes} паллет в позиции {place.Sector + "/" + place.Number}.");
+                }
+
+                string foundCode = FoundCode(product.Code);
+                if (foundCode == null && product.BoxesInPallete == 0)
+                    return Content("Введите количество коробов");
                 else
-                    product.Party = foundParty;
-            }
-            else
-            {
-                string existParty = _db.Products
-                    .Where(x => x.Code != product.Code && x.Party == product.Party)
-                    .Select(x => x.Party).FirstOrDefault();
-                if (existParty != null)
-                    return Content("Введенная партия принадлежит уже другому коду продукта.");
-            }
+                    product.BoxesInPallete = FindBoxesInPallete(product.Code);
 
-            _db.Products.Add(product);
-            await _db.SaveChangesAsync();
+                if (product.Party == null)
+                {
+                    string foundParty = FindParty(product.Term);
+                    if (foundParty == null)
+                        return Content($"Введите партию вручную. По сроку {product.Term.ToShortDateString()} партия не найдена.");
+                    else
+                        product.Party = foundParty;
+                }
+                else
+                {
+                    string existParty = _db.Products
+                        .Where(x => x.Code != product.Code && x.Party == product.Party)
+                        .Select(x => x.Party).FirstOrDefault();
+                    if (existParty != null)
+                        return Content("Введенная партия принадлежит уже другому коду продукта.");
+                }
+
+                UpdateParty(ref product);
+
+                _db.Products.Add(product);
+                await _db.SaveChangesAsync();
+            }
 
             return RedirectToAction("Products", "Warehouse");
+        }
+
+        private void UpdateParty(ref Product product)
+        {
+            string party = product.Party;
+
+            if (party.Length < 10)
+                for (int i = party.Length; i < 10; i++)
+                    party = "0" + party;
+
+            product.Party = party;
         }
 
         private Storage FoundStorage(Storage storage)
@@ -130,50 +146,48 @@ namespace Warehouse.Controllers
             return View();
         }
 
-        [HttpDelete]
-        public IActionResult Delete()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> Edit(Product product)
         {
-            Storage foundStorage = FoundStorage(product.Place.Storage);
-            if (!_db.Storages.Contains(foundStorage))
-                return Content("Склад не существует");
-
-            Place place = _db.Places.Where(x => x.Sector == product.Place.Sector && x.Number == product.Place.Number && x.StorageId == foundStorage.ID).FirstOrDefault();
-            if (!_db.Places.Contains(place))
+            if (ModelState.IsValid)
             {
-                place = new Place()
+                Storage foundStorage = FoundStorage(product.Place.Storage);
+                if (!_db.Storages.Contains(foundStorage))
+                    return Content("Склад не существует");
+
+                Place place = _db.Places.Where(x => x.Sector == product.Place.Sector && x.Number == product.Place.Number && x.StorageId == foundStorage.ID).FirstOrDefault();
+                if (!_db.Places.Contains(place))
                 {
-                    MaxPalletes = product.Place.MaxPalletes,
-                    Sector = product.Place.Sector,
-                    Number = product.Place.Number,
-                    StorageId = foundStorage.ID,
-                    Storage = foundStorage
-                };
+                    place = new Place()
+                    {
+                        MaxPalletes = product.Place.MaxPalletes,
+                        Sector = product.Place.Sector,
+                        Number = product.Place.Number,
+                        StorageId = foundStorage.ID,
+                        Storage = foundStorage
+                    };
+                }
+
+                product.PlaceId = place.ID;
+                product.Place = place;
+                product.Place.StorageId = foundStorage.ID;
+                product.Place.Storage = foundStorage;
+
+                int currPalletes = _db.Products.Where(x => x.ID == product.ID).Select(x => x.NumOfPalletes).FirstOrDefault();
+                int arrange = product.NumOfPalletes - currPalletes;
+                if (arrange < 0) arrange = 0;
+
+                int numPalletes = NumPalletesInPlace(place.ID) + arrange;
+                if (numPalletes > product.Place.MaxPalletes)
+                    return Content($"Нехватает места для {numPalletes - product.Place.MaxPalletes} паллет в позиции {product.Place.Sector + "/" + product.Place.Number}.");
+
+                Product currentProduct = FoundProduct(product.ID);
+                SetProductData(ref currentProduct, ref product);
+                UpdateParty(ref currentProduct);
+
+                _db.Products.Update(currentProduct);
+                await _db.SaveChangesAsync();
             }
-
-            product.PlaceId = place.ID;
-            product.Place = place;
-            product.Place.StorageId = foundStorage.ID;
-            product.Place.Storage = foundStorage;
-
-            int currPalletes = _db.Products.Where(x => x.ID == product.ID).Select(x => x.NumOfPalletes).FirstOrDefault();
-            int arrange = product.NumOfPalletes - currPalletes;
-            if (arrange < 0) arrange = 0;
-
-            int numPalletes = NumPalletesInPlace(place.ID) + arrange;
-            if (numPalletes > product.Place.MaxPalletes)
-                return Content($"Нехватает места для {numPalletes - product.Place.MaxPalletes} паллет в позиции {product.Place.Sector + "/" + product.Place.Number}.");
-
-            Product currentProduct = FoundProduct(product.ID);
-            SetProductData(ref currentProduct, ref product);
-
-            _db.Products.Update(currentProduct);
-            await _db.SaveChangesAsync();
 
             return RedirectToAction("Products", "Warehouse");
         }
@@ -217,17 +231,6 @@ namespace Warehouse.Controllers
             var currentPlace = _db.Products.Where(x => x.ID == productId).Include(p => p.Place).Include(s => s.Place.Storage).FirstOrDefault();
 
             return View(currentPlace);
-        }
-
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int id)
-        {
-            Product product = await _db.Products.FirstOrDefaultAsync(p => p.ID == id);
-            if (product != null)
-                return View(product);
-
-            return NotFound();
         }
 
         [HttpPost]
